@@ -1,0 +1,86 @@
+body{
+  overflow: hidden;
+}
+ .bg{
+  width: 100%;
+} 
+#options{
+  padding: 0;
+  margin-right: 0px;
+}
+#choose{
+  margin-top: 10px;
+}
+#login>span{
+  font-size: 20px;
+}
+#register>span{
+  font-size: 20px;
+}
+#title > img{
+  width: 100%;
+  margin-left: 1%;
+}
+.b-btn{
+  border-radius: 12px;
+  cursor: pointer;
+	margin-top: 10px;
+	overflow: hidden;
+	width: 100px;
+	height: 50px;
+	line-height: 50px;
+  background: #019067;
+	text-align: center;
+	margin-left: 20px;
+	color: #fff;
+	position: relative;
+}
+.a-btn {
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.b-btn span {
+  position: relative;
+  z-index: 999;
+  transition: 0.5s;
+  display: block;
+}
+.a-btn:hover {
+  color: black;
+}
+.a-btn:before {
+  content: "";
+  width: 0%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  color: #555;
+  transition: 0.5s;
+}
+.a-btn:hover:before {
+  width: 100%;
+  color: #555;
+}
+@media screen and (max-width: 1200px){
+   #title{
+     margin-top: 7%;
+   }
+   #options{
+     margin-right: 50px;
+   }
+}
+@media screen and (max-width: 1000px){
+  .b-btn{
+    float: right;
+    width: 75px;
+    height: 30px;
+    line-height: 30px;
+  }
+  #options{
+    margin-right: 20px;
+  }
+}
