@@ -1,3 +1,11 @@
+<%@ page import="userInfor.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="exam.Single" %>
+<%@ page import="exam.Judge" %>
+<%@ page import="exam.App" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +27,15 @@
 </head>
 
 <body class="sticky-header">
+<%
+    User user = (User)session.getAttribute("user");
+    String testId = "";
+    if(session.getAttribute("apps")!=null){
+        List<App> list =(List<App>) session.getAttribute("apps");
+        testId = list.get(1).getAid();
+    }
 
+%>
 <!--Start left side Menu-->
 <div class="left-side sticky-left-side">
 
@@ -106,14 +122,14 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                            <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                                 <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -137,7 +153,7 @@
                     </li>
                     
                     <li class="active">
-                        刘某人
+                        <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -153,88 +169,144 @@
                      </div>
                  </div>
 
-                     <div class="col-md-12">
-                        <div class="white-box">
-                            <div class="table_text text-center">
-                                <span><i class="glyphicon glyphicon-list-alt"></i>试卷详情</span>
-                                <span class="pull-right"><i class="glyphicon glyphicon-time"></i>&nbsp;答题时间:120分钟</span>
-                            </div>
-                            <div class="">
-                                <form class="form-horizontal" role="form">
-                                    <div><h2>第一部分，单选题</h2></div><hr>
-                                    <div class="options">
-                                        <h3>1.以下选项那些不为水果</h3>
-                                        <input type="radio"  name="a1" onfocus="worknum(1)">
-                                        <label>A.</label><span>苹果</span><br>
-                                        <input type="radio"  name="a1"  onfocus="worknum(1)">
-                                        <label>B.</label><span>香蕉</span><br>
-                                        <input type="radio"  name="a1"  onfocus="worknum(1)">
-                                        <label>C.</label><span>水果</span><br>
-                                        <input type="radio"  name="a1"  onfocus="worknum(1)">
-                                        <label>D.</label><span>荔枝</span><br>
-                                    </div>
-                                    <hr>
-                                    <div class="options">
-                                        <h3>2.以下选项那些不为水果</h3>
-                                        <input type="radio"  name="a2"  onfocus="worknum(2)">
-                                        <label>A.</label><span>苹果</span><br>
-                                        <input type="radio"  name="a2"  onfocus="worknum(2)">
-                                        <label>B.</label><span>香蕉</span><br>
-                                        <input type="radio"  name="a2"  onfocus="worknum(2)">
-                                        <label>C.</label><span>水果</span><br>
-                                        <input type="radio"  name="a2"  onfocus="worknum(2)">
-                                        <label>D.</label><span>荔枝</span><br>
-                                    </div>
-                                    <hr>
-                                    <div><h2> 第二部分，判断题</h2></div><hr>
-                                    
-                                    <hr>
-                                    <div class="options">
-                                            <h3>1.火星上有水？</h3>
-                                            <input type="radio"  name="b1"  onfocus="worknum(3)">
-                                            <label>A.</label><span>正确</span><br>
-                                            <input type="radio"  name="b1"  onfocus="worknum(3)">
-                                            <label>B.</label><span>错误</span><br>
-                                    </div>
-                                    <hr>
-                                    <div class="options">
-                                            <h3>2.你是SB？</h3>
-                                            <input type="radio"  name="b2"  onfocus="worknum(4)">
-                                            <label>A.</label><span>YES</span><br>
-                                            <input type="radio"  name="b2"  onfocus="worknum(4)">
-                                            <label>B.</label><span>呵呵</span><br>
-                                    </div>
-                                    <hr>
-                                    <div><h2> 第三部分，应用题</h2></div><hr>
+            <div class="col-md-12">
+                <c:if test="${sessionScope.apps==null}">
+                    <form class="form-horizontal" role="form" action="findExamServlet">
+                        <label>试卷编号:</label>
+                        <input type="text" class="form-control" name="findExam"><br>
+                        <button class="btn btn-primary">
+                           <span>
+                                  <i class="fa fa-search"></i>&nbsp;查询试卷
+                           </span>
+                        </button>
+                    </form>
+                </c:if>
+                   <c:if test="${sessionScope.apps!=null}">
+                       <div class="white-box">
+                           <div class="table_text text-center">
+                               <span><i class="glyphicon glyphicon-list-alt"></i>${sessionScope.test}</span>
+                               <span class="pull-right"><i class="glyphicon glyphicon-time"></i>&nbsp;答题时间:120分钟</span>
+                           </div>
+                           <div class="">
+                               <form class="form-horizontal" role="form">
+                                   <div><h2>第一部分，单选题</h2></div><hr>
+                                   <% int i = 1;%>
+                                   <f:forEach var="item" items="${sessionScope.singles}">
+                                       <div class="options">
+                                           <h3>${item.no}.${item.title}</h3>
+                                           <input type="radio"  name="a${item.no}" onfocus="worknum(<%=i%>,'A')" value="A" ><span></span>
+                                           <label>A.</label><span>${item.op_A}</span><br>
+                                           <input type="radio"  name="a${item.no}"  onfocus="worknum(<%=i%>,'B')" value="B">
+                                           <label>B.</label><span>${item.op_B}</span><br>
+                                           <input type="radio"  name="a${item.no}"  onfocus="worknum(<%=i%>,'C')" value="C">
+                                           <label>C.</label><span>${item.op_C}</span><br>
+                                           <input type="radio"  name="a${item.no}"  onfocus="worknum(<%=i%>,'D')" value="D">
+                                           <label>D.</label><span>${item.op_D}</span><br>
+                                           <%i+=1;%>
+                                       </div>
+                                       <hr>
+                                   </f:forEach>
+                                   <div><h2> 第二部分，判断题</h2></div><hr>
+                                   <c:forEach var="item" items="${sessionScope.judges}">
+                                       <h3>${item.no}.${item.title}</h3>
+                                       <input type="radio"  name="b${item.no}"  onfocus="worknum(<%=i%>,'1')" value="1">
+                                       <label>A.</label><span>${item.op_One}</span><br>
+                                       <input type="radio"  name="b${item.no}"  onfocus="worknum(<%=i%>,'2')" value="2">
+                                       <label>B.</label><span>${item.op_Two}</span><br>
+                                       <%i+=1;%>
+                                   </c:forEach>
+                                   <hr>
+                                   <div><h2> 第三部分，应用题</h2></div><hr>
+                                   <c:forEach var="item" items="${sessionScope.apps}">
+                                       <p style="font-size:1.2em;color:#766c96;">${item.no}.${item.title}</p>
+                                       <textarea rows="10" cols="80" onfocus="worknum(<%=i%>)">
 
-                                    <div>
-                                        <p style="font-size:1.2em;color:#766c96;">1.请列出我国的所有省份名称:</p>
-                                        <textarea rows="10" cols="40" onfocus="worknum(5)">
+                                            </textarea>
+                                       <%i+=1;%>
+                                   </c:forEach>
+                                   <div style="position: fixed;right: 60px;top:45%;background: #0e0e0e;color: #FFFFFF;padding: 20px 30px;">
+                                       <span><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;完成度:&nbsp;&nbsp;<b id="work1">0</b>&nbsp;/<b><%=i-1%></b></span><br>
+                                       <span><i class="glyphicon glyphicon-time">&nbsp;时间: </i> <b id="txt"></b> </span>
+                                   </div >
 
-                                        </textarea>
-                                    </div>
-                                    <div>
-                                        <span><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;完成度:&nbsp;&nbsp;<b id="work1">0</b>&nbsp;/<b>5</b></span>
-                                    </div>
-                                    <hr>
-                                    <label>试卷名称:</label>
-                                    <input type="text" class="form-control" ><br>
-                                    <label>截止日期:</label>
-                                    <input type="text" class="form-control" ><br>                                   
-                                    <button class="btn btn-primary">
+                               </form>
+                               <hr>
+                               <button class="btn btn-primary "  data-toggle="modal" data-target="#myModal">
                                         <span>
                                             <i class="glyphicon glyphicon-upload"></i>&nbsp;提交试卷
                                         </span>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+                               </button>
+                           </div>
+                       </div>
+                   </c:if>
 					<!-- Start inbox widget-->
                    </div>
                    <!--End row-->
 			    </div>
          <!--End footer -->
        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-dialog">
+                <form action="StuExamServlet" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">
+                                答题信息
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" name="cid"  id = "cid" value="<%=user.ID%>" hidden>
+                            <input type="text" name="tname"  value="${sessionScope.test}" hidden>
+                            <input type="text" name="tid"  value="<%=testId%>" hidden>
+                            <table class="table table-border">
+                                <thead>
+                                <%
+                                    int i=1;
+                                %>
+                                    <tr>
+                                        <c:forEach var="i" items="${sessionScope.singleAnswer}">
+                                            <th><%=i++%></th>
+                                        </c:forEach>
+                                        <c:forEach var="i" items="${sessionScope.judgeAnswer}">
+                                            <th><%=i++%></th>
+                                        </c:forEach>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="answerx">
+                                        <c:forEach  var="item" items="${sessionScope.singleAnswer}">
+                                                <td>${item}</td>
+                                        </c:forEach>
+                                        <c:forEach  var="item" items="${sessionScope.judgeAnswer}">
+                                            <td>${item}</td>
+                                        </c:forEach>
+                                    </tr>
+                                    <tr id="answers">
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <label>正确数</label>
+                            <input type="text" class="form-control " value="" name="num" id="num">
+                            <hr>
+                            <label>得分</label>
+                                <input type="text" class="form-control " value="" name="grade" id="grade">
+                            <hr>
+                            <button type="button" onclick="get()"  class="btn btn-primary">
+                                试卷评测
+                            </button>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="" class="btn btn-primary">
+                                提交
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </form>
+            </div><!-- /.modal -->
+        </div>
+        </div>
       <!--End main content -->
     <!--Begin core plugin -->
     <script src="assets/js/jquery.min.js"></script>
@@ -243,8 +315,66 @@
     <script  src="assets/js/jquery.slimscroll.js "></script>
     <script src="assets/js/jquery.nicescroll.js"></script>
     <script src="assets/js/functions.js"></script>
-    <script src="assets/js/examrun.js">
+    <script>
+        var i = 0;
+        var ansewr = new Array('未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交');
+        var items = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+        function worknum(index,e) {
+            if (items[index] === 0) {
+                i++;
+                items[index] = 1;
+                ansewr[index-1] = e;
+            } else {
 
+            }
+            document.getElementById("work1").innerHTML = i;
+        }
+
+        var tr = document.getElementById("answers");
+        var tr2 = document.getElementById("answerx");
+        var flag = false;
+        var answerTrue = 0;
+        function get()
+        {
+
+            if(!flag){
+                for(var o in ansewr){
+                    tr.insertCell();
+                    if(ansewr[o]!=undefined){
+                        tr.cells[o].appendChild(document.createTextNode(ansewr[o]));
+                    }
+                    else {
+                        tr.cells[o].appendChild(document.createTextNode("未提交"));
+                    }
+                }
+                flag = true;
+            }
+
+            for(var i=0;i<tr2.children.length;i++){
+                if(tr.children[i].innerText.trim()===tr2.children[i].innerText.trim()){
+                    answerTrue++;
+                }
+            }
+            document.getElementById('grade').value =Math.floor(answerTrue*100/(tr2.children.length));
+            document.getElementById('num').value = answerTrue ;
+        }
+        function startTime(){
+            var today=new Date();
+            var h=today.getHours();
+            var m=today.getMinutes();
+            var s=today.getSeconds();// 在小于10的数字前加一个‘0’
+            m=checkTime(m);
+            s=checkTime(s);
+            document.getElementById('txt').innerHTML=h+":"+m+":"+s;
+            t=setTimeout(function(){startTime()},500);
+        }
+        function checkTime(i){
+            if (i<10){
+                i="0" + i;
+            }
+            return i;
+        }
+        startTime();
     </script>
 </body>
 

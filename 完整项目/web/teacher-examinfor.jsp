@@ -1,3 +1,11 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="userInfor.User" %>
+<%@ page import="mysql.GetDb" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.util.List" %>
+<%@ page import="exam.StuExam" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +27,26 @@
 </head>
 
 <body class="sticky-header">
+<%
+    User user = (User)session.getAttribute("user");
 
+    GetDb db = new GetDb();
+    List<StuExam> stuExamList = new ArrayList<>();
+    try {
+        PreparedStatement ps = db.conn.prepareStatement("select test_name,name,grade,d_date from stu_test,users where users.id = stu_test.id;");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            stuExamList.add(new StuExam(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getString(4)));
+        }
+
+        rs.close();ps.close();db.CloseAll();
+        application.setAttribute("stuExamList",stuExamList);
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
+%>
 
     <!--Start left side Menu-->
     <div class="left-side sticky-left-side">
@@ -112,14 +139,14 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                            <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                                 <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -142,7 +169,7 @@
                         <a href="teacher-index.jsp">教师</a>
                     </li>
                     <li class="active">
-                        刘某人
+                        <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -160,7 +187,7 @@
                             <hr>
                             <div>
                                 <form class="form-inline" role="form">
-                                    <label for="name">排序方式&nbsp;</label>
+                                    <label>排序方式&nbsp;</label>
                                     <select class="form-control">
                                             <option>试题名称</option>
                                             <option>成绩</option>
@@ -184,45 +211,33 @@
                                         <th>试题名称</th>
                                         <th>姓名</th>
                                         <th>分数</th>
-                                        <th>查看操作</th>
+                                        <th>提交时间</th>
                                         <th>删除操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <%
+                                    int i = 0;
+                                %>
+                                <c:forEach var="item" items="${stuExamList}">
                                     <tr>
-                                        <th>第一次测试</th>
-                                        <th>张翰</th>
-                                        <th>86</th>
+                                        <th>${item.name}</th>
+                                        <th>${item.testName}</th>
+                                        <th>${item.grade}</th>
+                                        <th>${item.date}</th>
                                         <th>
-                                            <button class="btn btn-primary">
-                                                <span><i class="glyphicon glyphicon-pencil"></i>&nbsp;查看</span>
-                                            </button>
-                                            </th>
-                                            <th>
                                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
                                                 <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
                                             </button>
                                         </th>
                                     </tr>
-                                    <tr>
-                                        <th>第二次测试</th>
-                                        <th>鱼丸</th>
-                                        <th>76</th>
-                                        <th>
-                                            <button class="btn btn-primary" >
-                                                <span><i class="glyphicon glyphicon-pencil"></i>&nbsp;查看</span>
-                                            </button>
-                                            </th>
-                                            <th>
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
-                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                            </button>
-                                        </th>
-                                    </tr>
+                                    <%++i;%>
+                                </c:forEach>
+
                                 </tbody>
                             </table>
                             <div class="pull-right col-md-8 col-sm-12" style="overflow: auto;">
-                                    提交总数 :<span class="list_text">56</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    提交总数 :<span class="list_text"><%=i-1%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                      <button class="btn btn-primary"><span><i class="fa   fa-fast-backward"></i></span>&nbsp;&nbsp;首页</button>
                                      <button class="btn btn-primary"><span><i class="fa fa-backward"></i></span>&nbsp;&nbsp;上一页</button>
                                      <button class="btn btn-infor" disabled>&nbsp;&nbsp;1&nbsp;&nbsp;</button>
@@ -236,7 +251,7 @@
                    <!--End row-->
                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form action="deal" method="GET">
+                            <form action="RmExamServlet" method="post">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -248,6 +263,8 @@
                                 </div>
                                 <div class="modal-body">
                                     你确认删除姓名为:&nbsp;&nbsp;<span id="delname" style="color:red"></span>&nbsp;&nbsp;&nbsp;  试题为:&nbsp;&nbsp;<span id="delid" style="color:royalblue"></span>&nbsp;&nbsp;的信息？
+                                    <input id="date" name="date" hidden>
+                                    <input id="name" name="name"  value="" hidden>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">取消
@@ -278,7 +295,10 @@
     doms[i].onclick = function(){
         
         delName.innerHTML = this.parentNode.parentNode.children[1].innerText;
+
         delID.innerHTML = this.parentNode.parentNode.children[0].innerText;
+        document.getElementById('name').value = this.parentNode.parentNode.children[0].innerText;
+        document.getElementById('date').value = this.parentNode.parentNode.children[3].innerText;
         }
     }
     </script>

@@ -169,6 +169,80 @@
         <url-pattern>/shareServlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SingleUpdateServlet</servlet-name>
+        <servlet-class>exam.SingleUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SingleUpdateServlet</servlet-name>
+        <url-pattern>/SingleUpdateServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>JudgeUpdateServlet</servlet-name>
+        <servlet-class>exam.JudgeUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JudgeUpdateServlet</servlet-name>
+        <url-pattern>/JudgeUpdateServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AppUpdateServlet</servlet-name>
+        <servlet-class>exam.AppUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AppUpdateServlet</servlet-name>
+        <url-pattern>/AppUpdateServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteServlet</servlet-name>
+        <servlet-class>exam.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteServlet</servlet-name>
+        <url-pattern>/DeleteServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ExamServlet</servlet-name>
+        <servlet-class>exam.ExamServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExamServlet</servlet-name>
+        <url-pattern>/ExamServlet</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>StuExamServlet</servlet-name>
+        <servlet-class>exam.StuExamServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StuExamServlet</servlet-name>
+        <url-pattern>/StuExamServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>findExamServlet</servlet-name>
+        <servlet-class>exam.findExamServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>findExamServlet</servlet-name>
+        <url-pattern>/findExamServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RmExamServlet</servlet-name>
+        <servlet-class>exam.RmExamServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RmExamServlet</servlet-name>
+        <url-pattern>/RmExamServlet</url-pattern>
+    </servlet-mapping>
+
 
 
     <filter>

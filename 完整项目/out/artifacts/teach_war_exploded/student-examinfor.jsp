@@ -1,3 +1,11 @@
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="userInfor.User" %>
+<%@ page import="mysql.GetDb" %>
+<%@ page import="exam.StuExam" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +27,29 @@
 
 <body class="sticky-header">
 <!--Start left side Menu-->
+<%
+
+
+    User user = (User)session.getAttribute("user");
+
+    GetDb db = new GetDb();
+    List<StuExam> stuExamList = new ArrayList<>();
+    try {
+        PreparedStatement ps = db.conn.prepareStatement("select test_name,grade,d_date from stu_test where id = ?");
+        ps.setString(1,user.ID);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            stuExamList.add(new StuExam(user.Name,rs.getString(1),rs.getInt(2),rs.getString(3)));
+        }
+
+        rs.close();ps.close();db.CloseAll();
+        application.setAttribute("stuExamList",stuExamList);
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
+%>
 <div class="left-side sticky-left-side">
 
     <!--logo-->
@@ -104,14 +135,14 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                            <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                                 <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -135,7 +166,7 @@
                     </li>
                     
                     <li class="active">
-                        刘某人
+                       <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -161,7 +192,7 @@
 
                     <div>
                         <form class="form-inline" role="form">
-                            <label for="name">排序方式&nbsp;</label>
+                            <label>排序方式&nbsp;</label>
                             <select class="form-control">
                                 <option>编号</option>
                                 <option>分数</option>
@@ -182,27 +213,25 @@
                                 <tr class="table_text info">
                                     <th>编号</th>
                                     <th>试题名称</th>
-                                    <th>出题教师</th>
+                                    <th>提交日期</th>
                                     <th>分数</th>
-                                    <th>查看</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="list_text">
-                                    <td><button class="btn btn-primary">1</button></td>
-                                    <td>第一次考试</td>
-                                    <td>而巴基</td>
-                                    <td>85</td>
-                                    <td>
-                                        <button class="btn btn-primary"  data-toggle="modal" data-target="#myModal2"><span><i class="glyphicon glyphicon-search"></i>&nbsp;详情</span></button>
-                                    </td>
-                                </tr>
-                                                                                                                         
+                                    <% int i =0;%>
+                                    <f:forEach var="item" items="${stuExamList}">
+                                        <tr class="list_text">
+                                        <td><button class="btn btn-primary"><%=++i%></button></td>
+                                            <td>${item.testName}</td>
+                                            <td>${item.date}</td>
+                                            <td>${item.grade}</td>
+                                        </tr>
+                                    </f:forEach>
                             </tbody>
                         </table>
                         <hr>
                         <div class="pull-right col-md-8 col-sm-12" style="overflow: auto;">
-                            总人数 :<span class="list_text">96</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            总数 :<span class="list_text"><%=i%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                              <button class="btn btn-primary"><span><i class="fa   fa-fast-backward"></i></span>&nbsp;&nbsp;首页</button>
                              <button class="btn btn-primary"><span><i class="fa fa-backward"></i></span>&nbsp;&nbsp;上一页</button>
                              <button class="btn btn-infor" disabled>&nbsp;&nbsp;1&nbsp;&nbsp;</button>

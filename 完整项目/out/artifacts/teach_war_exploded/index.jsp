@@ -82,7 +82,7 @@
         <a href="#" class="close" data-dismiss="alert" id="close_reg">
             &times;
         </a>
-        <form role="form" class="form-horizontal form_login">
+        <form role="form" class="form-horizontal form_login" method="post" action="registerServlet">
             <div class="col-md-4 col-md-offset-4">
                 <h1 id="title_register">Register</h1>
             </div>
@@ -90,27 +90,28 @@
                 <div class="col-md-offset-3 col-md-6">
                     <div class="radio option-stu-tea">
                         <label class="radio-inline lab_stu">
-                            <img src="assets/images/stus.png" alt="pic_stu1" class="img-responsive icon_stu" ><span class="option_word option_stu">学生</span>
+                            <img src="assets/images/stus.png" alt="pic_stu1" class="img-responsive icon_stu" ><span class="option_word option_stu"><input type="radio" value="Student" name="iden" >学生</span>
                         </label>
                         <label class="radio-inline lab_tea">
-                            <img src="assets/images/tea2.png" alt="pic_tea1" class="img-responsive icon_tea"><span class="option_word option_tea">老师</span>
+                            <img src="assets/images/tea2.png" alt="pic_tea1" class="img-responsive icon_tea"><span class="option_word option_tea"><input type="radio" value="Teacher" name="iden" >教师</span>
                         </label>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-user">
-                    <input type="text" placeholder="姓名" class="form-control input_username">
+                    <input type="text" placeholder="姓名" class="form-control input_username" name="rename">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <input type="text" placeholder="账户" class="form-control input_username" name="reid">
                 </div>
             </div>
             <div class="form-group">
                 <div>
-                    <input type="text" placeholder="账户" class="form-control input_username">
-                </div>
-            </div>
-            <div class="form-group">
-                <div>
-                    <input type="password" placeholder="密码" class="form-control input_pw">
+                    <input type="password" placeholder="密码" class="form-control input_pw" name="repw">
                 </div>
             </div>
             <div class="form-group">

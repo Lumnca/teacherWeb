@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="teach:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/teach_war</output-path>
+    <root id="archive" name="teach_war.war">
+      <element id="artifact" artifact-name="teach:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="file-copy" path="E:/IDEA/jar/jakarta-taglibs-standard-1.1.2/lib/standard.jar" />
+          <element id="file-copy" path="E:/IDEA/jar/jakarta-taglibs-standard-1.1.2/lib/jstl.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../Bcs/out/artifacts/Bcs_war_exploded/WEB-INF/lib/fastjson-1.2.53.jar" />
+          <element id="file-copy" path="E:/IDEA/jar/commons-fileupload-1.3.2.jar" />
+          <element id="file-copy" path="E:/IDEA/jar/commons-io-2.5.jar" />
+          <element id="file-copy" path="E:/IDEA/jar/mysql-connector-java-5.1.39-bin.jar" />
+          <element id="file-copy" path="E:/IDEA/jar/poi-3.9-20121203.jar" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

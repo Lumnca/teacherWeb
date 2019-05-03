@@ -24,9 +24,13 @@ public class rmsession  implements Filter {
 
         if (session.getAttribute("user")!=null) {
            session.removeAttribute("user");
+            session.removeAttribute("singles");
+            session.removeAttribute("judges");
+            session.removeAttribute("apps");
            session.invalidate();
            System.out.println("清除session成功！");
         }
+
         chain.doFilter(req,res);
     }
     public void destroy( ){

@@ -1,3 +1,14 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="userInfor.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="exam.Single" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="mysql.GetDb" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="exam.Judge" %>
+<%@ page import="exam.App" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +30,54 @@
 </head>
 
 <body class="sticky-header">
+<%
+    User user = (User)session.getAttribute("user");
+    List<Single> singleList = new ArrayList<>();
+    List<Judge> judgeList = new ArrayList<>();
+    List<App> appList = new ArrayList<>();
+    GetDb db = new GetDb();
+
+    System.out.println("----");
+    try{
+        PreparedStatement ps = db.conn.prepareStatement("select * from single where id = ?");
+        ps.setString(1,user.ID);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()){
+            singleList.add(new Single(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),
+            rs.getString(6),rs.getString(7),rs.getString(8),rs.getInt(9)));
+        }
+        rs.close();ps.close();
+
+        PreparedStatement ps2 = db.conn.prepareStatement("select * from judge where id = ?");
+        ps2.setString(1,user.ID);
+        ResultSet rs2 = ps2.executeQuery();
+
+        while (rs2.next()){
+            judgeList.add(new Judge(rs2.getString(1),rs2.getString(2),rs2.getString(3),rs2.getString(4),
+                    rs2.getString(5),rs2.getInt(6),rs2.getInt(7)));
+        }
+        rs2.close();ps2.close();
+
+        PreparedStatement ps3 = db.conn.prepareStatement("select * from app where id = ?");
+        ps3.setString(1,user.ID);
+        ResultSet rs3 = ps3.executeQuery();
+
+        while (rs3.next()){
+            appList.add(new App(rs3.getString(1),rs3.getString(2),rs3.getString(3),
+                    rs3.getString(4),rs3.getInt(5)));
+        }
+
+        rs3.close();rs3.close();
+        db.CloseAll();
+        application.setAttribute("singles",singleList);
+        application.setAttribute("judges",judgeList);
+        application.setAttribute("apps",appList);
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
+%>
 
 
     <!--Start left side Menu-->
@@ -111,14 +170,14 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                           <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                                 <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
                                 <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -142,7 +201,7 @@
                     </li>
                     
                     <li class="active">
-                        刘某人
+                        <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -188,8 +247,28 @@
                                                         <table class="table table-border">
                                                             <caption><span><i class="fa fa-chevron-circle-down"></i></span>&nbsp;单选题信息</caption>
                                                             <thead class="success">
+                                                            <tr>
+                                                                <th>题号</th>
+                                                                <th>题目信息</th>
+                                                                <th>选项A</th>
+                                                                <th>选项B</th>
+                                                                <th>选项C</th>
+                                                                <th>选项D</th>
+                                                                <th>答案</th>
+                                                            </tr>
                                                             </thead>
                                                             <tbody>
+                                                                <c:forEach var="item" items="${singles}">
+                                                                    <tr>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.title}</td>
+                                                                        <td>${item.op_A}</td>
+                                                                        <td>${item.op_B}</td>
+                                                                        <td>${item.op_C}</td>
+                                                                        <td>${item.op_D}</td>
+                                                                        <td>${item.answer}</td>
+                                                                    </tr>
+                                                                </c:forEach>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -197,8 +276,24 @@
                                                         <table class="table table-border">
                                                             <caption><span><i class="fa fa-chevron-circle-down"></i></span>&nbsp;判断题信息</caption>
                                                             <thead class="success">
+                                                            <tr>
+                                                                <th>题号</th>
+                                                                <th>题目信息</th>
+                                                                <th>选项1</th>
+                                                                <th>选项2</th>
+                                                                <th>答案</th>
+                                                            </tr>
                                                             </thead>
                                                             <tbody>
+                                                            <c:forEach var="item" items="${judges}">
+                                                                <tr>
+                                                                    <td>${item.no}</td>
+                                                                    <td>${item.title}</td>
+                                                                    <td>${item.op_One}</td>
+                                                                    <td>${item.op_Two}</td>
+                                                                    <td>${item.answer}</td>
+                                                                </tr>
+                                                            </c:forEach>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -206,8 +301,20 @@
                                                         <table class="table table-border">
                                                             <caption><span><i class="fa fa-chevron-circle-down"></i></span>&nbsp;应用题信息</caption>
                                                             <thead class="success">
+                                                            <tr>
+                                                                <th>题号</th>
+                                                                <th>题目信息</th>
+                                                                <th>备注</th>
+                                                            </tr>
                                                             </thead>
                                                             <tbody>
+                                                            <c:forEach var="item" items="${apps}">
+                                                                <tr>
+                                                                    <td>${item.no}</td>
+                                                                    <td>${item.title}</td>
+                                                                    <td>${item.mark}</td>
+                                                                </tr>
+                                                            </c:forEach>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -217,6 +324,7 @@
                                                         <table class="table table-border">
                                                             <thead class="table_text">
                                                                 <tr>
+                                                                    <th>题号</th>
                                                                     <th>题目信息</th>
                                                                     <th>选项A</th>
                                                                     <th>选项B</th>
@@ -228,49 +336,34 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="list_text">
+                                                            <c:forEach var="item" items="${singles}">
                                                                 <tr>
-                                                                    <td>餐哦按时吃</td>
-                                                                    <td>叛逆</td>
-                                                                    <td>法军</td>
-                                                                    <td>阿尼</td>
-                                                                    <td>阿丹</td>
-                                                                    <td>A</td>
+                                                                    <td>${item.no}</td>
+                                                                    <td hidden>${item.sid}</td>
+                                                                    <td>${item.title}</td>
+                                                                    <td>${item.op_A}</td>
+                                                                    <td>${item.op_B}</td>
+                                                                    <td>${item.op_C}</td>
+                                                                    <td>${item.op_D}</td>
+                                                                    <td>${item.answer}</td>
                                                                     <td>
-                                                                        <button class="btn btn-primary"  data-toggle="modal" data-target="#a1">
+                                                                        <button class="btn btn-primary single"  data-toggle="modal" data-target="#a1">
                                                                             <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
                                                                         </button>
                                                                     </td>
-                                                                   <td>
+                                                                    <td>
                                                                         <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
                                                                             <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
                                                                         </button>
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
-                                                                        <td>玻尿酸地</td>
-                                                                        <td>发挥</td>
-                                                                        <td>班的积分</td>
-                                                                        <td>发送到莫</td>
-                                                                        <td>am是大V哦</td>
-                                                                        <td>D</td>
-                                                                        <td>
-                                                                            <button class="btn btn-primary"  data-toggle="modal" data-target="#a1">
-                                                                                <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                            </button>
-                                                                        </td>
-                                                                       <td>
-                                                                            <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                            <td>
-                                                                                <button class="btn btn-primary"  data-toggle="modal" data-target="#a1">
-                                                                                    <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
-                                                                                </button>
-                                                                            </td>                                                                             
-                                                                </tr>
+                                                            </c:forEach>
+                                                            <tr>
+                                                                <td>
+                                                                    <button class="btn btn-primary"  data-toggle="modal" data-target="#a1" onclick="selectType(1)">
+                                                                        <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
+                                                                    </button></td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                 </div>                                            
@@ -281,6 +374,7 @@
                                                         <table class="table table-border">
                                                             <thead class="table_text">
                                                                 <tr>
+                                                                    <th>题号</th>
                                                                     <th>题目信息</th>
                                                                     <th>选项1</th>
                                                                     <th>选项2</th>
@@ -290,121 +384,43 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="list_text">
+                                                            <f:forEach var="item" items="${judges}">
                                                                 <tr>
-                                                                    <td>你是个人？</td>
-                                                                    <td>是</td>
-                                                                    <td>不是</td>
-                                                                    <td>2</td>
+                                                                    <td>${item.no}</td>
+                                                                    <td hidden>${item.jid}</td>
+                                                                    <td>${item.title}</td>
+                                                                    <td>${item.op_One}</td>
+                                                                    <td>${item.op_Two}</td>
+                                                                    <td>${item.answer}</td>
                                                                     <td>
-                                                                        <button class="btn btn-primary pd"  data-toggle="modal" data-target="#a3">
+                                                                        <button class="btn btn-primary judges"  data-toggle="modal" data-target="#a3">
                                                                             <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
                                                                         </button>
                                                                     </td>
-                                                                   <td>
+                                                                    <td>
                                                                         <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
                                                                             <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
                                                                         </button>
                                                                     </td>
                                                                 </tr>
-                                                                <tr>
-                                                                        <td>啊啊啊啊</td>
-                                                                        <td>是</td>
-                                                                        <td>不是</td>
-                                                                        <td>2</td>
-                                                                        <td>
-                                                                            <button class="btn btn-primary pd"  data-toggle="modal" data-target="#a3">
-                                                                                <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                            </button>
-                                                                        </td>
-                                                                       <td>
-                                                                            <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                            <td>
-                                                                                <button class="btn btn-primary pd"  data-toggle="modal" data-target="#a3">
-                                                                                    <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
-                                                                                </button>
-                                                                            </td>                                                                             
-                                                                        </tr>
+                                                            </f:forEach>
+                                                            <tr>
+                                                                <td>
+                                                                    <button class="btn btn-primary"  data-toggle="modal" data-target="#a3" onclick="selectType(2)">
+                                                                        <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
                                                             </tbody>
                                                         </table>
                                                 </div>                                             
                                         </div>
-
-
-                                  
-
-
-
-
-                                     <div class="tab-pane fade" id="e2">
-                                            <div class="table-responsive">
-                                                <table class="table table-border">
-                                                            <thead class="table_text">
-                                                                <tr>
-                                                                    <th>题目信息</th>
-                                                                    <th>选项1</th>
-                                                                    <th>选项2</th>
-                                                                    <th>答案</th>
-                                                                    <th>查看</th>
-                                                                    <th>删除</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="list_text">
-                                                                <tr>
-                                                                    <td>你是个人？</td>
-                                                                    <td>是</td>
-                                                                    <td>不是</td>
-                                                                    <td>2</td>
-                                                                    <td>
-                                                                        <button class="btn btn-primary pd"  data-toggle="modal" data-target="#a3">
-                                                                            <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                        </button>
-                                                                    </td>
-                                                                   <td>
-                                                                        <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                            <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                        <td>啊啊啊啊</td>
-                                                                        <td>是</td>
-                                                                        <td>不是</td>
-                                                                        <td>2</td>
-                                                                        <td>
-                                                                            <button class="btn btn-primary pd"  data-toggle="modal" data-target="#a3">
-                                                                                <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                            </button>
-                                                                        </td>
-                                                                       <td>
-                                                                            <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                            <td>
-                                                                                <button class="btn btn-primary yy"  data-toggle="modal" data-target="#a3">
-                                                                                    <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
-                                                                                </button>
-                                                                            </td>                                                                             
-                                                                    </tr>
-                                                            </tbody>
-                                                    </table>
-                                                </div>                                             
-                                            </div>
-
-
-                                            
-                                            <div class="tab-pane fade" id="e3">
+                                        <div class="tab-pane fade" id="e3">
                                                     <div class="table-responsive">
                                                         <table class="table table-border">
                                                                     <thead class="table_text">
                                                                         <tr>
+                                                                            <th>题号</th>
                                                                             <th>题目信息</th>
                                                                             <th>答案/备注</th>
                                                                             <th>查看</th>
@@ -412,41 +428,31 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody class="list_text">
+                                                                    <c:forEach var="item" items="${apps}">
                                                                         <tr>
-                                                                            <td>你是个人ldmld杀的面庞啊，s阿萨德MVP大三MVP哦AV是打磨奥普表示到AVAV？</td>
-                                                                            <td>参考啊</td>
+                                                                            <td>${item.no}</td>
+                                                                            <td hidden>${item.aid}</td>
+                                                                            <td>${item.title}</td>
+                                                                            <td>${item.mark}</td>
                                                                             <td>
-                                                                                <button class="btn btn-primary yy"  data-toggle="modal" data-target="#a4">
+                                                                                <button class="btn btn-primary apps"  data-toggle="modal" data-target="#a4">
                                                                                     <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
                                                                                 </button>
                                                                             </td>
-                                                                           <td>
+                                                                            <td>
                                                                                 <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
                                                                                     <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
                                                                                 </button>
                                                                             </td>
                                                                         </tr>
-                                                                        <tr>
-                                                                                <td>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</td>
-                                                                                <td>是SB</td>
+                                                                    </c:forEach>
+                                                                    <tr>
                                                                                 <td>
-                                                                                    <button class="btn btn-primary yy"  data-toggle="modal" data-target="#a4">
-                                                                                        <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                                    </button>
-                                                                                </td>
-                                                                               <td>
-                                                                                    <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                                        <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                                    </button>
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <button class="btn btn-primary yy"  data-toggle="modal" data-target="#a4">
+                                                                                    <button class="btn btn-primary"  data-toggle="modal" data-target="#a4" onclick="selectType(3)">
                                                                                         <span><i class="glyphicon glyphicon-plus-sign"></i>&nbsp;添加题目</span>
                                                                                     </button>
-                                                                                </td>                                                                             
-                                                                            </tr>
+                                                                                </td>
+                                                                    </tr>
                                                                     </tbody>
                                                             </table>
                                                 </div>                                             
@@ -465,20 +471,20 @@
       <!--End main content -->
       <div class="modal fade" id="a1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                    <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" action="SingleUpdateServlet"  method="post">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                             &times;
                         </button>
-                        <h4 class="modal-title" id="myModalLabel">
+                        <h4 class="modal-title">
                             <span><i  class="glyphicon glyphicon-comment"></i></span>&nbsp;&nbsp;选项详情
                         </h4>
                     </div>
                     <div class="modal-body">
                        
-                            <label><span><i class="fa fa-calendar-o"></i></span>&nbsp;题目信息</label>
-                            <textarea class="form-control tabinfor" rows="10" cols="50"></textarea>
+                            <label><span><i class="fa fa-calendar-o "></i></span>&nbsp;题目信息</label>
+                            <textarea class="form-control tabinfor" rows="10" cols="50" name="title"></textarea>
                                
                             <span><i class="glyphicon glyphicon-stats"></i>&nbsp;选项信息</span><hr> 
                             <label>选项数量</label>
@@ -489,20 +495,23 @@
                                     <option>4</option>
                                     <option>5</option>
                             </select>
+                            <label>题号</label>
+                            <input type="text"  class="form-control tabinfor" name="sno">
                             <label>选项A</label>
-                            <input type="text"  class="form-control tabinfor">
+                            <input type="text"  class="form-control tabinfor" name="op_A">
                             <label>选项B</label>
-                            <input type="text"  class="form-control tabinfor">
+                            <input type="text"  class="form-control tabinfor" name="op_B">
                             <label>选项C</label>
-                            <input type="text"  class="form-control tabinfor">
+                            <input type="text"  class="form-control tabinfor" name="op_C">
                             <label>选项D</label>
-                            <input type="text"  class="form-control tabinfor">
+                            <input type="text"  class="form-control tabinfor" name="op_D">
                             <label>选项E</label>
                             <input type="text"  class="form-control">
+                            <input type="text" name="select1" id="select1" value="0" hidden>
                             <hr>
                             <label><span><i class="fa fa-info "></i></span>&nbsp;题目答案</label>
                             <hr>
-                            <input type="text"  class="form-control tabinfor">
+                            <input type="text"  class="form-control tabinfor" name="single">
                         
                     </div>
                     <div class="modal-footer">
@@ -519,30 +528,33 @@
 
         <div class="modal fade" id="a3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                        <form class="form-horizontal" role="form">
+                        <form class="form-horizontal" role="form" action="JudgeUpdateServlet" method="post">
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                 &times;
                             </button>
-                            <h4 class="modal-title" id="myModalLabel">
+                            <h4 class="modal-title">
                                 <span><i  class="glyphicon glyphicon-comment"></i></span>&nbsp;&nbsp;选项详情
                             </h4>
                         </div>
                         <div class="modal-body">
                            
                                 <label><span><i class="fa fa-calendar-o"></i></span>&nbsp;题目信息</label>
-                                <textarea class="form-control tabinfor2" rows="10" cols="50"></textarea>
+                                <textarea class="form-control tabinfor2" rows="10" cols="50" name="jtitle"></textarea>
                                    
-                                <span><i class="glyphicon glyphicon-stats"></i>&nbsp;选项信息</span><hr> 
+                                <span><i class="glyphicon glyphicon-stats"></i>&nbsp;选项信息</span><hr>
+                                <label>题号</label>
+                                <input type="text"  class="form-control tabinfor2" name="jno">
                                 <label>选项1</label>
-                                <input type="text"  class="form-control tabinfor2">
+                                <input type="text"  class="form-control tabinfor2" name="op_one">
                                 <label>选项2</label>
-                                <input type="text"  class="form-control tabinfor2">
+                                <input type="text"  class="form-control tabinfor2" name="op_two">
+                                <input type="text" name="select2" id="select2" value="0" hidden>
                                 <hr>
                                 <label><span><i class="fa fa-info "></i></span>&nbsp;题目答案</label>
                                 <hr>
-                                <input type="text"  class="form-control tabinfor2">
+                                <input type="text"  class="form-control tabinfor2" name="judge">
                             
                         </div>
                         <div class="modal-footer">
@@ -560,25 +572,27 @@
 
             <div class="modal fade" id="a4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
-                            <form class="form-horizontal" role="form">
+                            <form class="form-horizontal" role="form" action="AppUpdateServlet" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                                     &times;
                                 </button>
-                                <h4 class="modal-title" id="myModalLabel">
+                                <h4 class="modal-title">
                                     <span><i  class="glyphicon glyphicon-comment"></i></span>&nbsp;&nbsp;选项详情
                                 </h4>
                             </div>
                             <div class="modal-body">
-                               
+                                    <label>题号</label>
+                                    <input type="text"  class="form-control tabinfor3" name="ano">
                                     <label><span><i class="fa fa-calendar-o"></i></span>&nbsp;题目信息</label>
-                                    <textarea class="form-control tabinfor3" rows="10" cols="50"></textarea>
+                                    <textarea class="form-control tabinfor3" rows="10" cols="50" name="apptext"></textarea>
                                     
                                     <hr>
                                     <label><span><i class="fa fa-info "></i></span>&nbsp;题目答案及备注</label>
                                     <hr>
-                                    <input type="text"  class="form-control tabinfor3">
+                                    <input type="text"  class="form-control tabinfor3" name="mark">
+                                    <input type="text" name="select3" id="select3" value="0" hidden>
                                 
                             </div>
                             <div class="modal-footer">
@@ -595,7 +609,7 @@
 
                 <div class="modal fade" id="a2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                                <form class="form-horizontal" role="form">
+                            <form class="form-horizontal" role="form" action="DeleteServlet" method="post">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -607,7 +621,9 @@
                                 </div>
                                 <div class="modal-body">
                                         <h4 style="color:red;">您确定删除此信息？</h4>
-                                    
+                                    <input name="delno" id="delno" hidden>
+                                    <input name="delid" id="delid" hidden>
+                                    <input name="deltype" id="deltype" hidden>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">取消
@@ -627,7 +643,99 @@
     <script  src="assets/js/jquery.slimscroll.js "></script>
     <script src="assets/js/jquery.nicescroll.js"></script>
     <script src="assets/js/functions.js"></script>
-    <script src="assets/js/exam.js"></script>
-</body>
+    <script>
+        var singles = document.getElementsByClassName('single');
+        var input1 = document.getElementsByClassName('tabinfor');
 
+        var judges = document.getElementsByClassName('judges');
+        var input2 = document.getElementsByClassName('tabinfor2');
+
+        var apps = document.getElementsByClassName('apps');
+        var input3 = document.getElementsByClassName('tabinfor3');
+
+        for(var i = 0; i <singles.length;i++){
+            singles[i].onclick = function () {
+                delType(1)
+                for(var j=0;j<input1.length;j++){
+                        input1[j].value = this.parentElement.parentElement.children[j].innerText;
+                }
+                input1[0].value = this.parentElement.parentElement.children[1].innerText;
+                input1[1].value = this.parentElement.parentElement.children[0].innerText;
+            }
+        }
+
+        for(var k = 0; k <judges.length;k++){
+            judges[k].onclick = function () {
+                delType(2);
+                for(var j=0;j<input2.length;j++){
+                    input2[j].value = this.parentElement.parentElement.children[j].innerText;
+                }
+                input2[0].value = this.parentElement.parentElement.children[1].innerText;
+                input2[1].value = this.parentElement.parentElement.children[0].innerText;
+            }
+        }
+
+        for(var l = 0; l <apps.length;l++){
+            apps[l].onclick = function () {
+                delType(3);
+                for(var j=0;j<input3.length;j++){
+                    input3[j].value = this.parentElement.parentElement.children[j].innerText;
+                }
+            }
+        }
+        function selectType(i) {
+            if(i===1){
+                document.getElementById('select1').value = '1';
+            }
+            else if(i===2){
+                document.getElementById('select2').value = '1';
+            }
+            else  if(i===3){
+                document.getElementById('select3').value = '1';
+            }
+            else {
+
+            }
+        }
+        function delType(i) {
+            if(i===1){
+                document.getElementById('select1').value = '0';
+            }
+            else if(i===2){
+                document.getElementById('select2').value = '0';
+            }
+            else  if(i===3){
+                document.getElementById('select3').value = '0';
+            }
+            else {
+
+            }
+        }
+        var del = document.getElementsByClassName("btn-danger");
+        for(var i=0;i<del.length;i++){
+            del[i].onclick = function () {
+                document.getElementById("delno").value = this.parentNode.parentNode.children[0].innerText;
+                document.getElementById("delid").value = this.parentNode.parentNode.children[1].innerText;
+
+                var l = this.parentNode.parentNode.children.length;
+                if(l>4&&l<8){
+                    document.getElementById("deltype").value = 'app';
+                }
+                else  if(l>=8&&l<10){
+                    document.getElementById("deltype").value = 'judge';
+                }
+                else {
+                    document.getElementById("deltype").value = 'single';
+                }
+            }
+        }
+    </script>
+</body>
+<%
+    String id = appList.get(1).getAid();
+    session.setAttribute("id",id);
+    application.removeAttribute("singles");
+    application.removeAttribute("judges");
+    application.removeAttribute("apps");
+%>
 </html>
