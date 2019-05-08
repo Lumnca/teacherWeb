@@ -29,14 +29,21 @@ public class ExamServlet extends HttpServlet {
 
         GetDb db = new GetDb();
         try{
-            PreparedStatement ps = db.conn.prepareStatement("insert into test values(?,?,?,?)");
-            ps.setString(1,user.ID);
-            ps.setString(2,name);
-            ps.setString(3,date);
-            ps.setString(4,id);
+            PreparedStatement ps = db.conn.prepareStatement("update test set test_name=? where test_id =?");
+            ps.setString(1,name);
+            ps.setString(2,id);
 
             ps.executeUpdate();
             ps.close();
+
+            PreparedStatement xk = db.conn.prepareStatement("update test set d_date=? where test_id =?");
+            xk.setString(2,id);
+            xk.setString(1,date);
+
+
+            xk.executeUpdate();
+            xk.close();
+
             db.CloseAll();
             response.sendRedirect("teacher-examinfor.jsp");
         }

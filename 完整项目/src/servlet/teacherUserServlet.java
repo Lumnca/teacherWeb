@@ -51,7 +51,7 @@ public class teacherUserServlet extends HttpServlet {
         catch(Exception e){
             e.printStackTrace();
         }
-        response.sendRedirect("teacher-index.jsp");
+        response.sendRedirect("ResServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -49,7 +49,7 @@ public class studentUserServlet extends HttpServlet {
         catch(Exception e){
             e.printStackTrace();
         }
-        response.sendRedirect("student-index.jsp");
+        response.sendRedirect("ResServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

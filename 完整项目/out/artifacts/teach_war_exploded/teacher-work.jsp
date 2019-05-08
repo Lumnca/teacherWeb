@@ -1,13 +1,12 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="userInfor.User" %>
 <%@ page import="userInfor.StudentCur" %>
 <%@ page import="userInfor.TeacherCur" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="">
@@ -121,9 +120,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>

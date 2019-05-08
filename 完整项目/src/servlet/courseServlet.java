@@ -46,7 +46,7 @@ public class courseServlet extends HttpServlet {
         }
 
         sc.setAttribute("flag",true);
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("ResServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

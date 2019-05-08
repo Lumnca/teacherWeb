@@ -27,6 +27,7 @@ public class rmsession  implements Filter {
             session.removeAttribute("singles");
             session.removeAttribute("judges");
             session.removeAttribute("apps");
+            session.removeAttribute("index");
            session.invalidate();
            System.out.println("清除session成功！");
         }

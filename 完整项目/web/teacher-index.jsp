@@ -49,16 +49,16 @@
         rs.close();
         ps.close();
         String curNums = JSON.toJSONString(nums,SerializerFeature.BeanToArray);
-        System.out.println(curNums);
         String curName= JSON.toJSONString(cnames,SerializerFeature.BeanToArray);
-        System.out.println(curName);
         application.setAttribute("curName",curName);
         application.setAttribute("curNums",curNums);
-
+        db.CloseAll();
     }
     catch (Exception e){
         e.printStackTrace();
     }
+
+
 %>
 
     <!--Start left side Menu-->
@@ -156,9 +156,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -290,6 +289,33 @@
         <footer class="footer-main">联系方式: Tel <span class="fa fa-phone-square"></span> : 1351111233 </footer>	
          <!--End footer -->
        </div>
+<!-- 弹出框 -->
+<%
+    if(application.getAttribute("flag")==null){
+        application.setAttribute("flag","hidden");
+    }
+    %>
+    <div class="mode" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false"
+         style="z-index: 999999;position: fixed;left:35%;top: 0px;visibility: ${flag} ">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="clo()">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        提示信息
+                    </h4>
+                </div>
+                <div class="modal-body" style="color: red;">
+                    <h3> ${message}</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clo()">确认</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
       <!--End main content -->
     <!--Begin core plugin -->
     <script src="assets/js/jquery.min.js"></script>
@@ -298,10 +324,12 @@
     <script  src="assets/js/jquery.slimscroll.js "></script>
     <script src="assets/js/jquery.nicescroll.js"></script>
     <script src="assets/js/functions.js"></script>
-
-
     <!--End Page Level Plugin-->
    <script>
+       function clo() {
+           document.getElementById("myModal").style.visibility="hidden";
+       }
+
        var curName = JSON.parse('${curName}');
        var curNums = JSON.parse('${curNums}');
 
@@ -397,10 +425,14 @@
         table2.setOption(option2);
    
    </script>
+
 <%
     application.removeAttribute("curName");
-    application.removeAttribute("curNums");
+    application.removeAttribute("n");
+    application.removeAttribute("message");
+    application.removeAttribute("flag");
 %>
+
 </body>
 
 </html>

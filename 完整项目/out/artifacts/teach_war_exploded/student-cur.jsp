@@ -118,9 +118,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="studnet-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -176,24 +175,16 @@
 
                     <div>
                         <form class="form-inline" role="form">
-                            <label for="name">排序方式&nbsp;</label>
+                            <label>排序方式&nbsp;</label>
                             <select class="form-control">
                                 <option>编号</option>
                                 <option>姓名</option>
                                 <option>学校</option>
                             </select>
-                            &nbsp;
+                            &nbsp; &nbsp; &nbsp;
                             <label>课程名称&nbsp;</label>
                             <input type="text" class="form-control ">
                             &nbsp;
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            <label>课程编号&nbsp;</label>
-                            &nbsp;
-                            <input type="text" class="form-control ">
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            &nbsp;
-                            <label>学校&nbsp;</label>
-                            <input type="text" class="form-control ">
                             <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
                         </form>
                         

@@ -244,6 +244,56 @@
     </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>ResServlet</servlet-name>
+        <servlet-class>servlet.ResServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResServlet</servlet-name>
+        <url-pattern>/ResServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>nextPageServlet</servlet-name>
+        <servlet-class>page.nextPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>nextPageServlet</servlet-name>
+        <url-pattern>/nextPageServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>fontPageServlet</servlet-name>
+        <servlet-class>page.fontPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fontPageServlet</servlet-name>
+        <url-pattern>/fontPageServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>endPageServlet</servlet-name>
+        <servlet-class>page.endPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>endPageServlet</servlet-name>
+        <url-pattern>/endPageServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>firstPageServlet</servlet-name>
+        <servlet-class>page.firstPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>firstPageServlet</servlet-name>
+        <url-pattern>/firstPageServlet</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type >
+        <location>/error.jsp</location>
+    </error-page>
+
 
     <filter>
         <filter-name>sessFilter</filter-name>
@@ -255,10 +305,103 @@
     </filter-mapping>
 
 
+<filter>
+    <filter-name>loginListen</filter-name>
+    <filter-class>filter.loginListen</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>loginListen</filter-name>
+    <url-pattern>/student-cur.jsp</url-pattern>
+</filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-examinfor.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-file.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-index.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-shw.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-table.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/student-talk.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/studnet-examruning.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/studnet-user.jsp</url-pattern>
+    </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-cur.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-examinfor.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-exammessage.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-examruning.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-file.jsp</url-pattern>
+    </filter-mapping>    <filter-mapping>
+    <filter-name>loginListen</filter-name>
+    <url-pattern>/teacher-index.jsp</url-pattern>
+</filter-mapping>    <filter-mapping>
+    <filter-name>loginListen</filter-name>
+    <url-pattern>/teacher-info.jsp</url-pattern>
+</filter-mapping>
+    <filter-mapping>
+    <filter-name>loginListen</filter-name>
+    <url-pattern>/teacher-shif.jsp</url-pattern>
+</filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-shw.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-stu.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-table.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-talk.jsp</url-pattern>
+    </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-user.jsp</url-pattern>
+    </filter-mapping>
 
-
+    <filter-mapping>
+        <filter-name>loginListen</filter-name>
+        <url-pattern>/teacher-work.jsp</url-pattern>
+    </filter-mapping>
 
 
 

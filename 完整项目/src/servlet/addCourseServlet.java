@@ -42,8 +42,7 @@ public class addCourseServlet extends HttpServlet {
 
                 int r =p2.executeUpdate();
                 if(r!=0){
-                    sc.setAttribute("message","课程添加成功！请重新登录");
-                    System.out.println("学生添加课程成功！");
+                    sc.setAttribute("message","课程添加成功!");
                 }
                 if(p1!=null){p1.close();} if(p2!=null){p2.close();}
 
@@ -56,7 +55,7 @@ public class addCourseServlet extends HttpServlet {
         }
 
         sc.setAttribute("flag",true);
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("ResServlet");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

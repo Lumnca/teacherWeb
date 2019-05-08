@@ -10,7 +10,6 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="assets/js/index.js"></script>
     <script src="assets/js/login.js"></script>
     <link rel="stylesheet" href="assets/css/login2.css">
     <link rel="stylesheet" href="assets/css/index.css">
@@ -50,14 +49,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-offset-3 col-md-6">
-                    <div class="radio option-stu-tea">
-                        <label class="radio-inline lab_stu">
-                            <img src="assets/images/stux.png" alt="pic_stu1" class="img-responsive icon_stu" ><span class="option_word option_stu">学生</span>
-                        </label>
-                        <label class="radio-inline lab_tea">
-                            <img src="assets/images/tea1.png" alt="pic_tea1" class="img-responsive icon_tea"><span class="option_word option_tea">老师</span>
-                        </label>
-                    </div>
+
                 </div>
             </div>
             <div class="form-group">
@@ -90,10 +82,10 @@
                 <div class="col-md-offset-3 col-md-6">
                     <div class="radio option-stu-tea">
                         <label class="radio-inline lab_stu">
-                            <img src="assets/images/stus.png" alt="pic_stu1" class="img-responsive icon_stu" ><span class="option_word option_stu"><input type="radio" value="Student" name="iden" >学生</span>
+                             <input type="radio" value="Student" name="iden" >学生
                         </label>
                         <label class="radio-inline lab_tea">
-                            <img src="assets/images/tea2.png" alt="pic_tea1" class="img-responsive icon_tea"><span class="option_word option_tea"><input type="radio" value="Teacher" name="iden" >教师</span>
+                            <input type="radio" value="Teacher" name="iden" >教师
                         </label>
                     </div>
                 </div>
@@ -120,7 +112,6 @@
                 </div>
             </div>
         </form>
-
     </div>
 </div>
 </div>
@@ -174,7 +165,51 @@
     <%
     application.removeAttribute("message");
     application.removeAttribute("flag");
-
     %>
+    $(document).ready(function(){
+
+        var win_height = $(window).innerHeight();
+        $(".bg").css({"height":win_height});
+
+
+        $('#login').click(function(){
+            $('#box_login').fadeIn(1500);
+            $('#box_reg').css('display','none');
+            $('#title').css('display','none');
+            $('.icon_stu').attr('src', 'img/stu1.png');
+            $('.icon_tea').attr('src', 'img/tea1.png');
+            $('.bg-bubbles').css('display','block');
+        })
+        $('#register').click(function(){
+            $('#box_reg').fadeIn(1500);
+            $('#box_login').css('display','none');
+            $('#title').css('display','none');
+            $('.icon_stu').attr('src', 'img/stu1.png');
+            $('.icon_tea').attr('src', 'img/tea1.png');
+            $('.bg-bubbles').css('display','block');
+        })
+        $('#close_login').click(function(){
+            $('#box_login').css('display','none');
+            $('#title').css('display','block');
+            $('.icon_stu').attr('src', 'img/stu1.png');
+            $('.icon_tea').attr('src', 'img/tea1.png');
+            $('.bg-bubbles').css('display','none');
+        })
+        $('#close_reg').click(function(){
+            $('#box_reg').css('display','none');
+            $('#title').css('display','block');
+            $('.icon_stu').attr('src', 'img/stu1.png');
+            $('.icon_tea').attr('src', 'img/tea1.png');
+            $('.bg-bubbles').css('display','none');
+        })
+
+        //背景自动切换
+        var image=new Array(4);
+        var n;
+        image[1]="assets/images/bg3.jpg";
+        image[2]="assets/images/bg2.jpg";
+        image[3]="assets/images/bg.jpg";
+        $(".bg").css({"background-image":"url("+image[1]+")"})
+    })
 </script>
 </html>

@@ -31,20 +31,34 @@
 <!--Start left side Menu-->
 <%
     User user = (User)session.getAttribute("user");
-    int i = 1;
+    int i = 1,index = 0,size=0;
     List<CurStudent> stuList = new ArrayList<>();
     TeacherCur tcur = (TeacherCur) user.cur;
+    if(session.getAttribute("index")!=null){
+        index = (int)session.getAttribute("index");
+    }
+    else {
+        index = 1;
+        session.setAttribute("index",1);
+    }
+
     GetDb db = new GetDb();
     try {
         PreparedStatement p = db.conn.prepareStatement("select users.name,stu_course.id,cname,users.sex,users.school from stu_course,tea_course,users where ( tea_course.cno =  stu_course.cno and users.id = stu_course.id) and ( tea_course.cno in (select cno from tea_course where id = ? ) );");
         p.setString(1,user.ID);
         ResultSet rs = p.executeQuery();
+        int l = 1;
         while (rs.next()){
-            stuList.add(new CurStudent(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)));
+            size++;
+            if(l>(index-1)*10&&l<=index*10){
+                stuList.add(new CurStudent(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)));
+            }
+            l++;
         }
         rs.close();p.close();
         application.setAttribute("stu",stuList);
-
+        session.setAttribute("size",size);
+        db.CloseAll();
     }
     catch (Exception e){
         e.printStackTrace();
@@ -145,9 +159,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -190,8 +203,7 @@
                 <!--Start row-->  
             <div class="col-md-12">
                 <div class="white-box">     
-                    <button  class="btn btn-primary" ><span><i class="glyphicon glyphicon-plus-sign"></i> 导出学生</span></button> 
-                    &nbsp; &nbsp; &nbsp; &nbsp;
+
                     <button  class="btn btn-primary" onclick="newurl()">
                             <span>
                                 <i class="glyphicon glyphicon-plus-sign"></i>添加学生
@@ -216,21 +228,8 @@
                             </select>
                             &nbsp;
                             <label>姓名&nbsp;</label>
-                            <input type="text" class="form-control ">
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            &nbsp;
-                            <label>账号&nbsp;</label>
-                            <input type="text" class="form-control ">
-                            &nbsp;
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            <label>课程&nbsp;</label>
-                            &nbsp;
-                            <input type="text" class="form-control ">
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            &nbsp;
-                            <label>学校&nbsp;</label>
-                            <input type="text" class="form-control ">
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
+                            <input type="text" class="form-control " id="findStu">
+                            <button  class="btn btn-primary" type="button" onclick="find()"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
                         </form>
                         
                     </div>
@@ -252,7 +251,7 @@
                             <tbody>
 
                             <c:forEach var="item" items="${stu}">
-                                    <tr class="list_text">
+                                    <tr class="list_text nameList">
                                         <td><button class="btn btn-primary"><%=i++%></button></td>
                                         <td>${item.name}</td>
                                         <td>${item.id}</td>
@@ -268,12 +267,12 @@
                         </table>
                         <hr>
                         <div class="pull-right col-md-8 col-sm-12" style="overflow: auto;">
-                            总人数 :<span class="list_text"><%=i-1%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                             <button class="btn btn-primary"><span><i class="fa   fa-fast-backward"></i></span>&nbsp;&nbsp;首页</button>
-                             <button class="btn btn-primary"><span><i class="fa fa-backward"></i></span>&nbsp;&nbsp;上一页</button>
-                             <button class="btn btn-infor" disabled>&nbsp;&nbsp;1&nbsp;&nbsp;</button>
-                             <button class="btn btn-primary">下一页&nbsp;&nbsp;<span><i class="fa  fa-forward"></i></span></button>
-                             <button class="btn btn-primary">尾页&nbsp;&nbsp;<span><i class="fa  fa-fast-forward"></i></span></button>
+                            总人数 :<span class="list_text"><%=size%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                             <button class="btn btn-primary"><span><i class="fa   fa-fast-backward" onclick="firstPage()"></i></span>&nbsp;&nbsp;首页</button>
+                             <button class="btn btn-primary " onclick="fontPage()"><span><i class="fa fa-backward"></i></span>&nbsp;&nbsp;上一页</button>
+                             <button class="btn btn-infor" disabled>&nbsp;&nbsp;${sessionScope.index}&nbsp;&nbsp;</button>
+                             <button class="btn btn-primary" onclick="nextPage()">下一页&nbsp;&nbsp;<span><i class="fa  fa-forward"></i></span></button>
+                             <button class="btn btn-primary" onclick="endPage()">尾页&nbsp;&nbsp;<span><i class="fa  fa-fast-forward"></i></span></button>
                         </div>
                     </div>                                                            
                 </div>
@@ -337,6 +336,30 @@
 
         function  newurl(){
             window.location.href="teacher-info.jsp";
+        }
+        function find() {
+           var list =   document.getElementsByClassName("nameList");
+           var name = document.getElementById("findStu");
+           for(var i=0;i<list.length;i++){
+               if(list[i].children[1].innerText.trim()===name.value){
+                   list[i].style.color ="red";
+               }
+               else {
+
+               }
+           }
+        }
+        function nextPage() {
+            window.location.href="nextPageServlet";
+        }
+        function fontPage() {
+            window.location.href="fontPageServlet";
+        }
+        function  firstPage() {
+            window.location.href="firstPageServlet";
+        }
+        function endPage() {
+            window.location.href="endPageServlet";
         }
     </script>
 <%

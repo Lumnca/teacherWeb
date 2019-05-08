@@ -64,7 +64,7 @@ public class Table {
                 }
                 for(int cellNum = 0;cellNum<hssfRow.getLastCellNum();cellNum++){    //获取列
                     HSSFCell cell = hssfRow.getCell(cellNum);
-                    data[rowNum].rowData[cellNum] = getValue(cell);
+                    data[rowNum].rowData[cellNum] = getValue(cell).trim();
                     if(cell==null){
                         data[rowNum].rowData[cellNum] = " ";
                         continue;

@@ -55,8 +55,6 @@
             System.out.println("错误信息："+e.getMessage());
             e.printStackTrace();
         }
-
-
     %>
     <!--logo-->
     <div class="logo">
@@ -144,9 +142,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="studnet-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -212,10 +209,6 @@
                             <input type="text" class="form-control ">
                             &nbsp;
                             <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
-                            &nbsp;
-                            <label>提交状态&nbsp;</label>
-                            <input type="text" class="form-control ">
-                            <button  class="btn btn-primary" type="submit"><span><i class="glyphicon glyphicon-zoom-in"></i>&nbsp;搜索</span></button>
                         </form>
                         
                     </div>
@@ -233,6 +226,7 @@
                                     <th>提交状态</th>
                                     <th>截止时间</th>
                                     <th>查看作业</th>
+                                    <th>下载文件</th>
                                     <th>查看提交</th>
                                     <th>重新提交/提交</th>
                                 </tr>
@@ -249,6 +243,9 @@
                                     <td>${item.hwData}</td>
                                     <td>
                                        <a class="btn btn-success"  href="TeacherHw/${item.fileurl}"><span><i class="glyphicon glyphicon-search"></i>&nbsp;详情</span></a>
+                                    </td>
+                                    <td>
+                                        <a   class="btn btn-primary"  href="TeacherHw/${item.fileurl}" download="TeacherHw/${item.fileurl}"><span><i class=" glyphicon glyphicon-save"></i>&nbsp;下载作业</span></a>
                                     </td>
                                     <td>
                                         <a class="btn btn-primary" href="StudentHw/<%=user.ID%>/${item.filename}"><span><i class="glyphicon glyphicon-search"></i>&nbsp;查看提交</span></a>
@@ -343,5 +340,7 @@
     }
     </script>
 
-
+<%
+    application.removeAttribute("hwList");
+%>
 </html>

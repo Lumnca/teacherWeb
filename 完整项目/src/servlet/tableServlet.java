@@ -25,22 +25,23 @@ public class tableServlet extends javax.servlet.http.HttpServlet {
         ServletContext app = request.getServletContext();
         String createUrl = app.getRealPath("excel");
         Workbook wb = new HSSFWorkbook();
-        List<TableData> data = JSON.parseArray(request.getParameter("tableData"),TableData.class);
+        List<TableData> data = JSON.parseArray(request.getParameter("tableData").trim(),TableData.class);
         Table.Insert(data,wb,createUrl);
-        request.setAttribute("flag","s");
-
+        app.setAttribute("flag","s");
+        app.setAttribute("message","导出成功");
         HttpSession session = request.getSession();
         User u = (User)session.getAttribute("user");
 
 
-        if("studnet".equals(u.sfn)){
+        if("Student".equals(u.sfn)){
              response.sendRedirect("student-table.jsp");
         }
-        else{
+        else if(u.sfn.equals("Teacher")){
             response.sendRedirect("teacher-table.jsp");
         }
-
-
+        else {
+            response.sendRedirect("index.jsp");
+        }
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
@@ -48,7 +49,6 @@ public class tableServlet extends javax.servlet.http.HttpServlet {
     }
 
     public void destroy(HttpServletRequest request, HttpServletResponse response)throws ServletException {
-        request.removeAttribute("flag");
 
     }
 }

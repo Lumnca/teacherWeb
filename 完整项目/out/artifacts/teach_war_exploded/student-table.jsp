@@ -2,7 +2,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +20,9 @@
 
 <body class="sticky-header">
 
-
+<%
+    User user = (User)session.getAttribute("user");
+%>
 <!--Start left side Menu-->
 <div class="left-side sticky-left-side">
 
@@ -108,14 +109,13 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                            <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="studnet-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -135,11 +135,11 @@
                 <h4 class="page-title"><span><i class="fa fa-table"></i></span>&nbsp;自动制表</h4>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="student-table.jsp">${sessionScope.user.sfn}</a>
+                        <a href="#">学生</a>
                     </li>
                     
                     <li class="active">
-                        ${sessionScope.user.name}
+                        <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>
@@ -159,8 +159,7 @@
                         <div class="white-box">
                             ${message}
                             <%
-                                session.setAttribute("user",new User("MH2534","路达","123456","student"));
-                                if(request.getAttribute("flag")!=null)
+                                if(application.getAttribute("flag")!=null)
                                 {
                                     out.println(" <a download='excel/in.xls'  <a href='excel/in.xls'   class=\"btn btn-primary\" ><span><i class=\"fa fa-download\"></i>下载该表</span></a>");
                                 }
@@ -1139,7 +1138,7 @@
         if('${data}'!="")
         {
             var tbody = document.getElementsByTagName("tbody")[0];
-            var data = JSON.parse('${data}');
+            var data = JSON.parse('${data}'.trim());
             for(var i=0;i<data.length;i++){
                 for(var j=0;j<15;j++){
                     if(data[i]!=null){
@@ -1158,7 +1157,6 @@ function loadup(){
     var table = new Array();
     function tableData(i) {
         this.rowData = [];
-        this.rowIndex = i;
     }
     for(var i=0;i<tbody.children.length;i++){
         table[i] = new tableData(i);
@@ -1250,12 +1248,12 @@ $(function(){
              tdObj.html(text);
          }
      });
-
  });
-       
-
 });
     </script>
 </body>
-
+<%
+    application.removeAttribute("data");
+    application.removeAttribute("flag");
+%>
 </html>

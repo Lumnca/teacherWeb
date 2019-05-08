@@ -100,7 +100,7 @@ public class stuHwServlet extends HttpServlet {
                         File storeFile = new File(filePath);
                         System.out.println();
                         item.write(storeFile);
-                        sc.setAttribute("message", "文件上传成功!");
+                        sc.setAttribute("message", fileName+"文件上传成功!");
                     }
                     else {
                         if(j==0){
@@ -147,7 +147,7 @@ public class stuHwServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("ResServlet");
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);

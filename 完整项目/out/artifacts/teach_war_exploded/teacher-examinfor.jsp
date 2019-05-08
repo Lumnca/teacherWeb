@@ -33,7 +33,8 @@
     GetDb db = new GetDb();
     List<StuExam> stuExamList = new ArrayList<>();
     try {
-        PreparedStatement ps = db.conn.prepareStatement("select test_name,name,grade,d_date from stu_test,users where users.id = stu_test.id;");
+        PreparedStatement ps = db.conn.prepareStatement("select test_name,name,grade,d_date from stu_test,users where users.id = stu_test.id and test_id = (select test_id  from test where id = ?)");
+        ps.setString(1,user.ID);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()){
@@ -143,9 +144,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -237,7 +237,7 @@
                                 </tbody>
                             </table>
                             <div class="pull-right col-md-8 col-sm-12" style="overflow: auto;">
-                                    提交总数 :<span class="list_text"><%=i-1%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    提交总数 :<span class="list_text"><%=i%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                      <button class="btn btn-primary"><span><i class="fa   fa-fast-backward"></i></span>&nbsp;&nbsp;首页</button>
                                      <button class="btn btn-primary"><span><i class="fa fa-backward"></i></span>&nbsp;&nbsp;上一页</button>
                                      <button class="btn btn-infor" disabled>&nbsp;&nbsp;1&nbsp;&nbsp;</button>

@@ -1,19 +1,24 @@
 package extcl;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import userInfor.User;
+
 @WebServlet(name = "fileDealServlet")
 public class fileDealServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -29,6 +34,10 @@ public class fileDealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+
+        ServletContext sc = request.getServletContext();
+
+
         if (!ServletFileUpload.isMultipartContent(request)) {
             // 如果不是则停止
             PrintWriter writer = response.getWriter();
@@ -84,10 +93,11 @@ public class fileDealServlet extends HttpServlet {
                         // 保存文件到硬盘
                         item.write(storeFile);
                         TableData[] data=  Table.GetData(request.getServletContext().getRealPath("excel/"+fileName));
-                        request.setAttribute("message",
+                        sc.setAttribute("message",
                                 "文件导入成功!");
                         String jsonText = JSON.toJSONString(data);
-                        request.setAttribute("data",jsonText);
+                        System.out.println(jsonText);
+                        sc.setAttribute("data",jsonText);
                     }
                 }
             }
@@ -96,14 +106,20 @@ public class fileDealServlet extends HttpServlet {
             request.setAttribute("message",
                     "错误信息: " + "文件错误或者格式不正确，具体信息:"+ex.getMessage());
         }
-
-
-
-
-
         // 跳转到 message.jsp
-        request.getServletContext().getRequestDispatcher("/student-table.jsp").forward(
-                request, response);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        sc.setAttribute("flag","导入成功！");
+        if (user.sfn.equals("Student")) {
+            request.getServletContext().getRequestDispatcher("/student-table.jsp").forward(
+                    request, response);
+        }
+        else {
+            request.getServletContext().getRequestDispatcher("/teacher-table.jsp").forward(
+                    request, response);
+        }
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

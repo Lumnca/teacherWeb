@@ -171,9 +171,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -222,7 +221,7 @@
                             <div class="">
                             <form class="form-horizontal" role="form" action="ExamServlet" method="post">
                                     <div><h2>第一部分，单选题</h2></div><hr>
-                                    <%int i =1;%>
+                                    <%int i =0;%>
                                     <div class="options">
                                         <c:forEach var="item" items="${singles}">
                                             <h3>${item.no}.${item.title}</h3>
@@ -261,14 +260,15 @@
                                             <%i+=1;%>
                                         </c:forEach>
                                     </div>
+
                                     <div>
-                                        <span><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;完成度:&nbsp;&nbsp;<b id="work1">0</b>&nbsp;/<b><%=i-1%></b></span>
+                                        <span><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;完成度:&nbsp;&nbsp;<b id="work1">0</b>&nbsp;/<b><%=i%></b></span>
                                     </div>
                                     <hr>
                                     <label>试卷名称:</label>
                                     <input type="text" class="form-control" name="ename"><br>
                                     <label>试卷编号:</label>
-                                    <input type="text" class="form-control" name="eid" ><br>
+                                    <input type="text" class="form-control" name="eid" id="eid"  value="${apps.get(0).aid}" onfocus="warn()"><br>
                                     <label>截止日期:</label>
                                     <input type="text" class="form-control" name="edate" ><br>
                                     <button class="btn btn-primary" type="submit">
@@ -294,6 +294,7 @@
     <script src="assets/js/jquery.nicescroll.js"></script>
     <script src="assets/js/functions.js"></script>
     <script>
+
         var i = 0;
         var items = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -306,6 +307,9 @@
 
             }
             document.getElementById("work1").innerHTML = i;
+        }
+        function warn() {
+            window.location.href = "";
         }
     </script>
 </body>

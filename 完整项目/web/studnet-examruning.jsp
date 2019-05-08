@@ -32,7 +32,7 @@
     String testId = "";
     if(session.getAttribute("apps")!=null){
         List<App> list =(List<App>) session.getAttribute("apps");
-        testId = list.get(1).getAid();
+        testId = list.get(0).getAid();
     }
 
 %>
@@ -126,9 +126,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="studnet-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -222,7 +221,6 @@
                                        <textarea rows="10" cols="80" onfocus="worknum(<%=i%>)">
 
                                             </textarea>
-                                       <%i+=1;%>
                                    </c:forEach>
                                    <div style="position: fixed;right: 60px;top:45%;background: #0e0e0e;color: #FFFFFF;padding: 20px 30px;">
                                        <span><i class="fa fa-bar-chart-o"></i>&nbsp;&nbsp;完成度:&nbsp;&nbsp;<b id="work1">0</b>&nbsp;/<b><%=i-1%></b></span><br>
@@ -317,8 +315,8 @@
     <script src="assets/js/functions.js"></script>
     <script>
         var i = 0;
-        var ansewr = new Array('未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交','未提交');
-        var items = new Array(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+        var ansewr = new Array(<%=i-1%>).fill("未提交");
+        var items = new Array(<%=i%>).fill(0);
         function worknum(index,e) {
             if (items[index] === 0) {
                 i++;
@@ -336,7 +334,7 @@
         var answerTrue = 0;
         function get()
         {
-
+            answerTrue = 0;
             if(!flag){
                 for(var o in ansewr){
                     tr.insertCell();
@@ -352,7 +350,11 @@
 
             for(var i=0;i<tr2.children.length;i++){
                 if(tr.children[i].innerText.trim()===tr2.children[i].innerText.trim()){
+                    tr.children[i].style.color='green';
                     answerTrue++;
+                }
+                else {
+                    tr.children[i].style.color='red';
                 }
             }
             document.getElementById('grade').value =Math.floor(answerTrue*100/(tr2.children.length));

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ public class StuExamServlet extends HttpServlet {
         String id = request.getParameter("cid").trim();
         String grade = request.getParameter("grade").trim();
         String tid = request.getParameter("tid").trim();
-
+        HttpSession session = request.getSession();
         GetDb db = new GetDb();
         try {
             Date now=new Date();
@@ -40,6 +41,11 @@ public class StuExamServlet extends HttpServlet {
             if(r!=0){
                 System.out.println("修改成功！");
             }
+            session.removeAttribute("judges");
+            session.removeAttribute("singles");
+            session.removeAttribute("apps");
+            session.removeAttribute("singleAnswer");
+            session.removeAttribute("judgeAnswer");
             response.sendRedirect("student-examinfor.jsp");
 
         }

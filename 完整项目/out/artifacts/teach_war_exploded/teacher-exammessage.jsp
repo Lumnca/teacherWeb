@@ -37,7 +37,6 @@
     List<App> appList = new ArrayList<>();
     GetDb db = new GetDb();
 
-    System.out.println("----");
     try{
         PreparedStatement ps = db.conn.prepareStatement("select * from single where id = ?");
         ps.setString(1,user.ID);
@@ -70,6 +69,7 @@
 
         rs3.close();rs3.close();
         db.CloseAll();
+
         application.setAttribute("singles",singleList);
         application.setAttribute("judges",judgeList);
         application.setAttribute("apps",appList);
@@ -174,9 +174,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -258,6 +257,7 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
+                                                            <c:if test="${singles!=null}">
                                                                 <c:forEach var="item" items="${singles}">
                                                                     <tr>
                                                                         <td>${item.no}</td>
@@ -269,6 +269,7 @@
                                                                         <td>${item.answer}</td>
                                                                     </tr>
                                                                 </c:forEach>
+                                                            </c:if>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -285,15 +286,17 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <c:forEach var="item" items="${judges}">
-                                                                <tr>
-                                                                    <td>${item.no}</td>
-                                                                    <td>${item.title}</td>
-                                                                    <td>${item.op_One}</td>
-                                                                    <td>${item.op_Two}</td>
-                                                                    <td>${item.answer}</td>
-                                                                </tr>
-                                                            </c:forEach>
+                                                            <c:if test="${judges!=null}">
+                                                                <c:forEach var="item" items="${judges}">
+                                                                    <tr>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.title}</td>
+                                                                        <td>${item.op_One}</td>
+                                                                        <td>${item.op_Two}</td>
+                                                                        <td>${item.answer}</td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </c:if>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -308,13 +311,15 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <c:forEach var="item" items="${apps}">
-                                                                <tr>
-                                                                    <td>${item.no}</td>
-                                                                    <td>${item.title}</td>
-                                                                    <td>${item.mark}</td>
-                                                                </tr>
-                                                            </c:forEach>
+                                                            <c:if test="${apps!=null}">
+                                                                <c:forEach var="item" items="${apps}">
+                                                                    <tr>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.title}</td>
+                                                                        <td>${item.mark}</td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </c:if>
                                                             </tbody>
                                                         </table>
                                                 </div>
@@ -336,28 +341,31 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="list_text">
-                                                            <c:forEach var="item" items="${singles}">
-                                                                <tr>
-                                                                    <td>${item.no}</td>
-                                                                    <td hidden>${item.sid}</td>
-                                                                    <td>${item.title}</td>
-                                                                    <td>${item.op_A}</td>
-                                                                    <td>${item.op_B}</td>
-                                                                    <td>${item.op_C}</td>
-                                                                    <td>${item.op_D}</td>
-                                                                    <td>${item.answer}</td>
-                                                                    <td>
-                                                                        <button class="btn btn-primary single"  data-toggle="modal" data-target="#a1">
-                                                                            <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                        </button>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                            <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            </c:forEach>
+                                                            <c:if test="${singles!=null}">
+                                                                <c:forEach var="item" items="${singles}">
+                                                                    <tr>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.title}</td>
+                                                                        <td>${item.op_A}</td>
+                                                                        <td>${item.op_B}</td>
+                                                                        <td>${item.op_C}</td>
+                                                                        <td>${item.op_D}</td>
+                                                                        <td>${item.answer}</td>
+                                                                        <td hidden>${item.sid}</td>
+                                                                        <td>
+                                                                            <button class="btn btn-primary single"  data-toggle="modal" data-target="#a1">
+                                                                                <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
+                                                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </c:if>
+
                                                             <tr>
                                                                 <td>
                                                                     <button class="btn btn-primary"  data-toggle="modal" data-target="#a1" onclick="selectType(1)">
@@ -384,26 +392,29 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="list_text">
-                                                            <f:forEach var="item" items="${judges}">
-                                                                <tr>
-                                                                    <td>${item.no}</td>
-                                                                    <td hidden>${item.jid}</td>
-                                                                    <td>${item.title}</td>
-                                                                    <td>${item.op_One}</td>
-                                                                    <td>${item.op_Two}</td>
-                                                                    <td>${item.answer}</td>
-                                                                    <td>
-                                                                        <button class="btn btn-primary judges"  data-toggle="modal" data-target="#a3">
-                                                                            <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                        </button>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                            <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            </f:forEach>
+                                                            <c:if test="${judges!=null}">
+                                                                <f:forEach var="item" items="${judges}">
+                                                                    <tr>
+                                                                        <td>${item.no}</td>
+                                                                        <td>${item.title}</td>
+                                                                        <td>${item.op_One}</td>
+                                                                        <td>${item.op_Two}</td>
+                                                                        <td>${item.answer}</td>
+                                                                        <td hidden>${item.jid}</td>
+                                                                        <td>
+                                                                            <button class="btn btn-primary judges"  data-toggle="modal" data-target="#a3">
+                                                                                <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
+                                                                                <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </f:forEach>
+                                                            </c:if>
+
                                                             <tr>
                                                                 <td>
                                                                     <button class="btn btn-primary"  data-toggle="modal" data-target="#a3" onclick="selectType(2)">
@@ -428,24 +439,27 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody class="list_text">
-                                                                    <c:forEach var="item" items="${apps}">
-                                                                        <tr>
-                                                                            <td>${item.no}</td>
-                                                                            <td hidden>${item.aid}</td>
-                                                                            <td>${item.title}</td>
-                                                                            <td>${item.mark}</td>
-                                                                            <td>
-                                                                                <button class="btn btn-primary apps"  data-toggle="modal" data-target="#a4">
-                                                                                    <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
-                                                                                </button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
-                                                                                    <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </c:forEach>
+                                                                    <c:if test="${apps!=null}">
+                                                                        <c:forEach var="item" items="${apps}">
+                                                                            <tr>
+                                                                                <td>${item.no}</td>
+                                                                                <td>${item.title}</td>
+                                                                                <td>${item.mark}</td>
+                                                                                <td hidden>${item.aid}</td>
+                                                                                <td>
+                                                                                    <button class="btn btn-primary apps"  data-toggle="modal" data-target="#a4">
+                                                                                        <span><i class="fa fa-search"></i>&nbsp;详细信息</span>
+                                                                                    </button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button class="btn btn-danger"  data-toggle="modal" data-target="#a2">
+                                                                                        <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </c:forEach>
+                                                                    </c:if>
+
                                                                     <tr>
                                                                                 <td>
                                                                                     <button class="btn btn-primary"  data-toggle="modal" data-target="#a4" onclick="selectType(3)">
@@ -496,7 +510,7 @@
                                     <option>5</option>
                             </select>
                             <label>题号</label>
-                            <input type="text"  class="form-control tabinfor" name="sno">
+                            <input type="text"  class="form-control tabinfor" name="sno" id="s1">
                             <label>选项A</label>
                             <input type="text"  class="form-control tabinfor" name="op_A">
                             <label>选项B</label>
@@ -545,7 +559,7 @@
                                    
                                 <span><i class="glyphicon glyphicon-stats"></i>&nbsp;选项信息</span><hr>
                                 <label>题号</label>
-                                <input type="text"  class="form-control tabinfor2" name="jno">
+                                <input type="text"  class="form-control tabinfor2" name="jno" id="s2">
                                 <label>选项1</label>
                                 <input type="text"  class="form-control tabinfor2" name="op_one">
                                 <label>选项2</label>
@@ -584,7 +598,7 @@
                             </div>
                             <div class="modal-body">
                                     <label>题号</label>
-                                    <input type="text"  class="form-control tabinfor3" name="ano">
+                                    <input type="text"  class="form-control tabinfor3" name="ano" id="s3">
                                     <label><span><i class="fa fa-calendar-o"></i></span>&nbsp;题目信息</label>
                                     <textarea class="form-control tabinfor3" rows="10" cols="50" name="apptext"></textarea>
                                     
@@ -621,6 +635,7 @@
                                 </div>
                                 <div class="modal-body">
                                         <h4 style="color:red;">您确定删除此信息？</h4>
+                                    <p>提示：题目必须含有一个</p>
                                     <input name="delno" id="delno" hidden>
                                     <input name="delid" id="delid" hidden>
                                     <input name="deltype" id="deltype" hidden>
@@ -686,12 +701,15 @@
         function selectType(i) {
             if(i===1){
                 document.getElementById('select1').value = '1';
+                document.getElementById('s1').value = '${singles.size()+1}'
             }
             else if(i===2){
                 document.getElementById('select2').value = '1';
+                document.getElementById('s2').value = '${judges.size()+1}'
             }
             else  if(i===3){
                 document.getElementById('select3').value = '1';
+                document.getElementById('s3').value = '${apps.size()+1}'
             }
             else {
 
@@ -715,24 +733,27 @@
         for(var i=0;i<del.length;i++){
             del[i].onclick = function () {
                 document.getElementById("delno").value = this.parentNode.parentNode.children[0].innerText;
-                document.getElementById("delid").value = this.parentNode.parentNode.children[1].innerText;
+
 
                 var l = this.parentNode.parentNode.children.length;
                 if(l>4&&l<8){
                     document.getElementById("deltype").value = 'app';
+                    document.getElementById("delid").value = this.parentNode.parentNode.children[3].innerText;
                 }
                 else  if(l>=8&&l<10){
                     document.getElementById("deltype").value = 'judge';
+                    document.getElementById("delid").value = this.parentNode.parentNode.children[5].innerText;
                 }
                 else {
                     document.getElementById("deltype").value = 'single';
+                    document.getElementById("delid").value = this.parentNode.parentNode.children[7].innerText;
                 }
             }
         }
     </script>
 </body>
 <%
-    String id = appList.get(1).getAid();
+    String id = appList.get(0).getAid();
     session.setAttribute("id",id);
     application.removeAttribute("singles");
     application.removeAttribute("judges");

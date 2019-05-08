@@ -1,3 +1,4 @@
+<%@ page import="userInfor.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,12 +24,14 @@
     .fa-caret-right,.fa-folder,.op,.fp,.fa-file-text-o,.fa-folder-open,.fa-caret-down{
        font-size: 2em;
     }
-    
+
     </style>
 </head>
 
 <body class="sticky-header">
-
+<%
+    User user = (User)session.getAttribute("user");
+%>
 <!--Start left side Menu-->
 <div class="left-side sticky-left-side">
 
@@ -114,14 +117,13 @@
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             <img src="assets/images/users/avatar-6.jpg" alt="" />
-                            刘某人
+                            <%=user.Name%>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
+                                <li> <a href="studnet-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
 
@@ -141,11 +143,11 @@
                 <h4 class="page-title"><span><i class="fa fa-clipboard"></i></span>&nbsp;资料分享</h4>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="#">教师</a>
+                        <a href="#">学生</a>
                     </li>
                     
                     <li class="active">
-                        刘某人
+                        <%=user.Name%>
                     </li>
                 </ol>
                 <div class="clearfix"></div>

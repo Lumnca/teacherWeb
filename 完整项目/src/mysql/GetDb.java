@@ -19,7 +19,7 @@ public class GetDb {
              ctx = new InitialContext();
              ds = (DataSource)ctx.lookup("java:comp/env/jdbc/teachingData");
              conn = ds.getConnection();
-             System.out.println("******************");
+             System.out.println("********数据获取连接*******");
          }
          catch (Exception e){
              System.out.println("错误信息"+e.getMessage());
@@ -45,7 +45,7 @@ public class GetDb {
              ds = (DataSource)ctx.lookup("java:comp/env/jdbc/teachingData");
              conn = ds.getConnection();
              preStatement = conn.prepareStatement(sql);
-
+            System.out.println("********数据库获取连接******");
          }
          catch (Exception e){
              System.out.println("错误信息"+e.getMessage());
@@ -82,7 +82,7 @@ public class GetDb {
          if(ctx!=null){
              ctx.close();
          }
-         System.out.println("数据库释放");
+         System.out.println("-------------数据库释放-------------");
      }
 
 }

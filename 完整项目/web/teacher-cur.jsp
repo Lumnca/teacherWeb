@@ -1,6 +1,10 @@
 <%@ page import="userInfor.User" %>
 <%@ page import="userInfor.TeacherCur" %>
 <%@ page import="userInfor.Cur" %>
+<%@ page import="mysql.GetDb" %>
+<%@ page import="userInfor.teacherData" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -24,7 +28,31 @@
 <%
     User user = (User)session.getAttribute("user");
     TeacherCur tcur = (TeacherCur) user.cur;
-    application.setAttribute("cur",tcur.CurList);
+    teacherData tea_data =  (teacherData)user.data;
+
+    GetDb db = new GetDb();
+    try {
+        PreparedStatement ps = db.conn.prepareStatement("select cname,tea_course.cno,count(stu_course.id) from stu_course right outer join tea_course  on stu_course.cno=tea_course.cno  group by cno having cno in (select cno from tea_course where  tea_course.id = ?)");
+        ps.setString(1,user.ID);
+        ResultSet rs = ps.executeQuery();
+        int[] nums = new int[tea_data.classNum];
+        String[] cnames = new String[tea_data.classNum];
+        int i = 0;
+        while (rs.next()){
+            cnames[i] = rs.getString(1);
+            nums[i] = rs.getInt(3);
+            i++;
+        }
+        rs.close();
+        ps.close();
+        application.setAttribute("curName",nums);
+        application.setAttribute("curNums",cnames);
+        application.setAttribute("cur",tcur.CurList);
+        db.CloseAll();
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
 %>
     <div class="left-side sticky-left-side">
         <div class="logo">
@@ -115,9 +143,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-                                <li> <a href="#"> <i class="fa fa-wrench"></i> 设置 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-user"></i> 个人 </a> </li>
-                                <li> <a href="#"> <i class="fa fa-info"></i> 帮助 </a> </li>
+                                <li> <a href="teacher-user.jsp"> <i class="fa fa-user"></i> 个人 </a> </li>
+                                <li> <a href="help.jsp"> <i class="fa fa-info"></i> 帮助 </a> </li>
                                 <li> <a href="index.jsp"> <i class="fa fa-sign-out"></i> 退出 </a> </li>
                          </ul>
                     </li>
@@ -204,11 +231,12 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <%int j=0;%>
                         <c:forEach var="item" items="${cur}">
                             <tr class="list_text">
                                 <td>${item.cname}</td>
                                 <td>${item.cno}</td>
-                                <td>${item.cnum}</td>
+                                <td>${curName[cur.indexOf(item)]}</td>
                                 <td>${item.state}</td>
                                 <td>
                                     <button class="btn btn-danger"  data-toggle="modal" data-target="#myModal"><span><i class="fa fa-times-circle"></i>&nbsp;删除</span></button>
@@ -281,5 +309,10 @@
             document.getElementById("del").value =  this.parentNode.parentNode.children[1].innerText;
         }
     }
+    <%
+        application.removeAttribute("cur");
+        application.removeAttribute("curName");
+        application.removeAttribute("curNums");
+    %>
 </script>
 </html>

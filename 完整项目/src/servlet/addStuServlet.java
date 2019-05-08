@@ -57,19 +57,15 @@ public class addStuServlet extends HttpServlet {
                 session.setAttribute("message","添加该学生成功！");
                 ps1.close();db2.CloseAll();
                 session.setAttribute("flag",true);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("ResServlet");
             }
             catch (Exception e){
                 session.setAttribute("message","添加该学生失败！错误原因："+e.getMessage());
                 session.setAttribute("flag",true);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("ResServlet");
                 e.printStackTrace();
             }
         }
-
-
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
