@@ -34,21 +34,24 @@
         GetDb db = new GetDb();
         int i = 1;
         try {
-            PreparedStatement ps1 =  db.conn.prepareStatement("select hw.name , hw.cname, tea_course.name, d_date,tea_course.id,hw.hw_file from hw,tea_course,stu_course where hw.cname = tea_course.cname and stu_course.cno =  tea_course.cno  and stu_course.id=?;");
+            PreparedStatement ps1 =  db.conn.prepareStatement("select hw.name,hw.cname,(select name from users where id = hw.id) as teaname,hw.d_date,hw.id ,hw.hw_file,infor,stuhw.hw_file  from hw left join stuhw on(hw.cname = stuhw.cname) and (hw.name = stuhw.hw_name)  and stuhw.id = ?");
             ps1.setString(1,user.ID);
             ResultSet rs = ps1.executeQuery();
             List<Stuhw> stuHwList = new ArrayList<>();
             while (rs.next()){
-                stuHwList.add(new Stuhw(rs.getString(1),rs.getString(2),rs.getString(3),"可提交",rs.getString(4),
-                        rs.getString(5),rs.getString(6)));
+                if(rs.getString(7)==null){
+                    stuHwList.add(new Stuhw(rs.getString(1),rs.getString(2),rs.getString(3),"未提交",rs.getString(4),
+                            rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                }
+                else {
+                    stuHwList.add(new Stuhw(rs.getString(1),rs.getString(2),rs.getString(3),"已提交",rs.getString(4),
+                            rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8)));
+                }
+
+
             }
             rs.close();ps1.close();db.CloseAll();
             application.setAttribute("hwList",stuHwList);
-            for (Stuhw s:stuHwList
-                 ) {
-                System.out.println(s.getFileurl());
-            }
-
 
         }
         catch (Exception e){
@@ -225,6 +228,8 @@
                                     <th>课程教师</th>
                                     <th>提交状态</th>
                                     <th>截止时间</th>
+                                    <th hidden>作业信息</th>
+                                    <th>反馈信息</th>
                                     <th>查看作业</th>
                                     <th>下载文件</th>
                                     <th>查看提交</th>
@@ -241,6 +246,10 @@
                                     <td>${item.teaName}</td>
                                     <td>${item.state}</td>
                                     <td>${item.hwData}</td>
+                                    <td hidden>${item.infor}</td>
+                                    <td>
+                                        <button class="btn btn-primary in"  onclick="getInfor()" data-toggle="modal" data-target="#infor" ><span><i class="fa fa-comments"></i>&nbsp;查看</span></button>
+                                    </td>
                                     <td>
                                        <a class="btn btn-success"  href="TeacherHw/${item.fileurl}"><span><i class="glyphicon glyphicon-search"></i>&nbsp;详情</span></a>
                                     </td>
@@ -248,7 +257,7 @@
                                         <a   class="btn btn-primary"  href="TeacherHw/${item.fileurl}" download="TeacherHw/${item.fileurl}"><span><i class=" glyphicon glyphicon-save"></i>&nbsp;下载作业</span></a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-primary" href="StudentHw/<%=user.ID%>/${item.filename}"><span><i class="glyphicon glyphicon-search"></i>&nbsp;查看提交</span></a>
+                                        <a class="btn btn-primary" href="StudentHw/<%=user.ID%>/${item.myfile}"><span><i class="glyphicon glyphicon-search"></i>&nbsp;查看提交</span></a>
                                     </td>
                                     <td>
                                         <button class="btn btn-success tj"  data-toggle="modal" data-target="#myModal"><span><i class="glyphicon glyphicon-repeat"></i>&nbsp;提交</span></button>
@@ -309,7 +318,7 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                    <span><i class="glyphicon glyphicon-open-file"></i></span>&nbsp;提交
+                                    <span><i class="fa fa-mail-forward (alias)"></i></span>&nbsp;提交
                             </button>
                         </div>
                     </div><!-- /.modal-content -->
@@ -318,6 +327,37 @@
             </div>
             </div>
         </div>
+
+
+<!-- 弹出框 -->
+<div class="modal fade" id="infor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="" role="form"  method="post" action="stuHwServlet" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="">
+                        反馈信息
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p id="hwinfor"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button type="button" class="btn btn-primary">
+                        <span><i class="glyphicon glyphicon-open-file"  data-dismiss="modal"></i></span>&nbsp;确认
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </form>
+    </div><!-- /.modal -->
+</div>
+</div>
+</div>
 </body>
       <!--End main content -->
     <!--Begin core plugin -->
@@ -332,10 +372,22 @@
     var doms = document.getElementsByClassName("tj");
     var hwName = document.getElementById("hwname");
     var cName = document.getElementById("cname");
+    var infors = document.getElementsByClassName("in");
+    var tr = document.getElementsByTagName("tr");
+    for(var k = 1;k<tr.length;k++){
+        if(tr[k].children[4].innerText.trim()==="未提交"){
+            tr[k].children[4].style.color='red';
+        }
+    }
     for(var i = 0;i<doms.length;i++){
         doms[i].onclick = function(){
             hwName.value = this.parentNode.parentNode.children[1].innerText;
             cName.value = this.parentNode.parentNode.children[2].innerText;
+        }
+    }
+    for(var l = 0;l<infors.length;l++){
+        infors[l].onclick = function(){
+            document.getElementById("hwinfor").innerHTML = this.parentNode.previousSibling.previousSibling.innerText;
         }
     }
     </script>

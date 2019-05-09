@@ -128,7 +128,7 @@ public class stuHwServlet extends HttpServlet {
 
         GetDb db = new GetDb();
         try {
-            PreparedStatement ps1 = db.conn.prepareStatement("insert into stuhw value(?,?,?,?,?)");
+            PreparedStatement ps1 = db.conn.prepareStatement("insert into stuhw value(?,?,?,?,?,'没有消息')");
 
             ps1.setString(1,user.ID);
             ps1.setString(2,hwName);

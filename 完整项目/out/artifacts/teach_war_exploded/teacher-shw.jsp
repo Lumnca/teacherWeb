@@ -35,12 +35,12 @@
     int i = 0;
     GetDb db = new GetDb();
     try {
-        PreparedStatement ps = db.conn.prepareStatement("select hw_name, stuhw.hw_file, users.name, stuhw.d_date, stuhw.cname, users.id from stuhw,hw,users where hw.name = stuhw.hw_name and stuhw.cname= hw.cname and stuhw.id=users.id and hw.id=?");
+        PreparedStatement ps = db.conn.prepareStatement("select hw_name, stuhw.hw_file, users.name, stuhw.d_date, stuhw.cname, users.id,infor from stuhw,hw,users where hw.name = stuhw.hw_name and stuhw.cname= hw.cname and stuhw.id=users.id and hw.id=?");
         ps.setString(1,user.ID);
         ResultSet rs = ps.executeQuery();
         while(rs.next()){
             stuhwList.add(new Stuhw(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)
-            ,rs.getString(6)));
+            ,rs.getString(6),rs.getString(7)));
         }
         rs.close();ps.close();
         application.setAttribute("stuhwList",stuhwList);
@@ -217,6 +217,8 @@
                                         <th>课程名称</th>
                                         <th>查看操作</th>
                                         <th>下载文件</th>
+                                        <th hidden>信息内容</th>
+                                        <th>反馈信息</th>
                                         <th>删除操作</th>
                                     </tr>
                                 </thead>
@@ -235,6 +237,12 @@
                                         <td>
                                             <a   class="btn btn-primary"  href="StudentHw/${item.state}/${item.filename}" download="StudentHw/${item.state}/${item.filename}"><span><i class=" glyphicon glyphicon-save"></i>&nbsp;下载作业</span></a>
                                         </td>
+                                        <th hidden>${item.infor}</th>
+                                        <th>
+                                            <button  class="btn btn-success set" data-toggle="modal" data-target="#infor" >
+                                                <span><i class="fa fa-comment"></i>&nbsp;反馈</span>
+                                            </button>
+                                        </th>
                                         <th>
                                             <button class="btn btn-danger" data-toggle="modal" data-target="#myModal">
                                                 <span><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;删除</span>
@@ -285,8 +293,39 @@
                             </form>
                         </div><!-- /.modal -->
                     </div>
+
+
+            <div class="modal fade" id="infor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form action="stuHwInforServlet" method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+                                <h4 class="modal-title">
+                                    添加/修改反馈信息
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <input  type="text"  name="rename" id="rename" hidden>
+                                <input  type="text"  name="refile" id="refile" hidden>
+                                <textarea  name="reinfor" id="reinfor" cols="75%" rows="20"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">
+                                   <span><i class="fa  fa-edit (alias)"></i>确认修改</span>
+                                </button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </form>
+                </div><!-- /.modal -->
+            </div>
        </div>
     </div>
+
+
       <!--End main content -->
     <!--Begin core plugin -->
     <script src="assets/js/jquery.min.js"></script>
@@ -300,6 +339,8 @@
     var doms = document.getElementsByClassName("btn-danger");
     var delName = document.getElementById("delname");
     var delID = document.getElementById("delid");
+    var infors = document.getElementsByClassName("set");
+
     for(var i = 0;i<doms.length;i++){
     doms[i].onclick = function(){
         
@@ -307,6 +348,13 @@
         delID.innerHTML = this.parentNode.parentNode.children[1].innerText;
         document.getElementById('stuName').value = this.parentNode.parentNode.children[2].innerText;
         document.getElementById('fileName').value =  this.parentNode.parentNode.children[1].innerText;
+        }
+    }
+    for(var l=0;l<infors.length;l++){
+        infors[l].onclick = function () {
+            document.getElementById("reinfor").value = this.parentNode.previousSibling.previousSibling.innerText;
+            document.getElementById('rename').value = this.parentNode.parentNode.children[2].innerText;
+            document.getElementById('refile').value =  this.parentNode.parentNode.children[1].innerText;
         }
     }
     </script>

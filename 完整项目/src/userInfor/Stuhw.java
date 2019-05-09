@@ -8,18 +8,21 @@ public class Stuhw {
     private String hwData;
     private String fileurl;
     private String filename;
+    private String infor;
+    private String myfile;
     public  Stuhw(){
 
     }
-    public  Stuhw(String hw,String fn,String n,String hd,String cn,String f){
+    public  Stuhw(String hw,String fn,String n,String hd,String cn,String f,String in){
         hwName = hw;
         filename = fn;
         teaName = n;
         hwData = hd;
         cname = cn;
         state = f;
+        infor = in;
     }
-    public  Stuhw(String hw,String c,String th,String s,String hd,String pa,String ch){
+    public  Stuhw(String hw,String c,String th,String s,String hd,String pa,String ch,String in,String my){
         hwName = hw;
         cname = c;
         teaName = th;
@@ -27,6 +30,24 @@ public class Stuhw {
         hwData = hd;
         fileurl = pa+"/"+ch;
         filename = ch;
+        infor = in;
+        myfile = my;
+    }
+
+    public String getMyfile() {
+        return myfile;
+    }
+
+    public void setMyfile(String myfile) {
+        this.myfile = myfile;
+    }
+
+    public String getInfor() {
+        return infor;
+    }
+
+    public void setInfor(String infor) {
+        this.infor = infor;
     }
 
     public String getFilename() {

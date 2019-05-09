@@ -203,10 +203,9 @@
             $('.bg-bubbles').css('display','none');
         })
 
-        //背景自动切换
         var image=new Array(4);
         var n;
-        image[1]="assets/images/bg3.jpg";
+        image[1]="assets/images/bg4.png";
         image[2]="assets/images/bg2.jpg";
         image[3]="assets/images/bg.jpg";
         $(".bg").css({"background-image":"url("+image[1]+")"})
